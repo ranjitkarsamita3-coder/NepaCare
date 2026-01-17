@@ -30,7 +30,6 @@ if (isset($_POST['login'])) {
     } else {
         $login_input_safe = mysqli_real_escape_string($conn, $login_input);
 
-        // Determine if email or phone
         if (filter_var($login_input_safe, FILTER_VALIDATE_EMAIL)) {
             $query = mysqli_query($conn, "SELECT * FROM users WHERE email='$login_input_safe' LIMIT 1");
         } elseif (preg_match('/^(97|98)[0-9]{8}$/', $login_input_safe)) {
@@ -39,91 +38,80 @@ if (isset($_POST['login'])) {
             $message = "Enter a valid email or phone number starting with 97 or 98.";
         }
 
-        // Only check password if $query exists
-        if (isset($query)) {
-            if (mysqli_num_rows($query) === 1) {
-                $user = mysqli_fetch_assoc($query);
+        if (isset($query) && mysqli_num_rows($query) === 1) {
+            $user = mysqli_fetch_assoc($query);
 
-                if (password_verify($password, $user['password'])) {
-                    $_SESSION['user_id'] = $user['id'];
-                    $_SESSION['role']    = $user['role'];
-                    $_SESSION['name']    = $user['name'];
+            if (password_verify($password, $user['password'])) {
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['role']    = $user['role'];
+                $_SESSION['name']    = $user['name'];
 
-                    // Remember me
-                    if (isset($_POST['remember'])) {
-                        $token = bin2hex(random_bytes(16));
-                        mysqli_query($conn, "UPDATE users SET remember_token='$token' WHERE id='{$user['id']}'");
-                        setcookie("remember_token", $token, time() + (86400 * 30), "/");
-                    }
-
-                    header("Location: " . ($user['role'] === 'elder' ? "elder_dashboard.php" : "caregiver_dashboard.php"));
-                    exit;
-                } else {
-                    $message = "Incorrect password.";
+                if (isset($_POST['remember'])) {
+                    $token = bin2hex(random_bytes(16));
+                    mysqli_query($conn, "UPDATE users SET remember_token='$token' WHERE id='{$user['id']}'");
+                    setcookie("remember_token", $token, time() + (86400 * 30), "/");
                 }
+
+                header("Location: " . ($user['role'] === 'elder' ? "elder_dashboard.php" : "caregiver_dashboard.php"));
+                exit;
             } else {
-                $message = "User not found.";
+                $message = "Incorrect password.";
             }
+        } else {
+            $message = "User not found.";
         }
     }
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login - NepaCare</title>
-    <link rel="stylesheet" href="assets/css/loginstyle.css">
-</head>
-<body>
-
-<!-- NAVBAR -->
-<div class="top-nav">
-    <a href="index.php" class="logo">
-        <img src="assets/images/logo.png" alt="NepaCare Logo">
-        <span>NepaCare</span>
-    </a>
-    <div class="nav-links">
-        <a href="index.php">Home</a>
-        <a href="about.php">About Us</a>
-        <a href="contact.php">Contact Us</a>
-        <a href="login.php">Login / Signup</a>
-    </div>
-</div>
+<?php include "components/header.php"; ?>
+<link rel="stylesheet" href="assets/css/colors.css">
+<link rel="stylesheet" href="assets/css/loginstyle.css">
 
 <!-- LOGIN BOX -->
-<div class="login-container">
-    <h1>Login - NepaCare</h1>
+<div class="login-container dark-card">
+    <h1>Welcome Back</h1>
 
     <?php if ($message): ?>
         <div class="message-box message-error"><?= $message ?></div>
     <?php endif; ?>
 
     <form method="POST">
-        <label>Email or Phone:</label>
-        <input type="text" name="login_input" value="<?= isset($_POST['login_input']) ? $_POST['login_input'] : ''; ?>" required>
 
-        <label>Password:</label>
+        <input type="text"
+            name="login_input"
+            placeholder="Email or Phone"
+            value="<?= isset($_POST['login_input']) ? $_POST['login_input'] : ''; ?>"
+            required>
+
         <div class="password-wrapper">
-            <input type="password" name="password" id="password" required>
-            <button type="button" class="toggle-btn" onclick="togglePassword(this)">Show</button>
-        </div>
-
-        <div class="remember">
-            <input type="checkbox" name="remember" id="remember" <?= isset($_POST['remember']) ? 'checked' : ''; ?>>
-            <label for="remember">Remember Me</label>
+            <input type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
+                required>
+            <span class="eye" onclick="togglePassword()">👁</span>
         </div>
 
         <input type="submit" name="login" value="Login">
+
     </form>
 
     <p class="signup-link">
-        Don’t have an account? <a href="signup.php">Signup here</a>
+        Don’t have an account? <a href="signup.php">Sign up</a>
     </p>
 </div>
 
+
 <script>
+    function togglePassword() {
+        const field = document.getElementById("password");
+        field.type = field.type === "password" ? "text" : "password";
+    }
+</script>
+
+
+<!-- <script>
 function togglePassword(btn) {
     const field = document.getElementById("password");
     if (field.type === "password") {
@@ -134,7 +122,6 @@ function togglePassword(btn) {
         btn.innerText = "Show";
     }
 }
-</script>
+</script> -->
 
-</body>
-</html>
+<?php include "components/footer.php"; ?>

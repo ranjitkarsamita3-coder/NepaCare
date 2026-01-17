@@ -1,5 +1,6 @@
-<footer class="footer">
-    <p>&copy; <?php echo date("Y"); ?> MyWebsite. All rights reserved.</p>
+<footer style="text-align:center; padding:15px; background:#f1f1f1; margin-top:30px;">
+    <p>&copy; <?php echo date("Y"); ?> NepaCare. All rights reserved.</p>
 </footer>
 
-<script src="/assets/js/script.js"></script>
+</body>
+</html>
