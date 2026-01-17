@@ -1,0 +1,56 @@
+.logo {
+    width: 120px;           /* same width everywhere */
+    height: 120px;          /* same height */
+    border-radius: 20px;    /* rounded square */
+    object-fit: cover;      /* keeps aspect ratio without stretching */
+    display: block;
+    margin: 0 auto 10px auto;
+    border: 1px solid #ccc; /* optional border */
+}
+
+.primary-btn {
+    background-color: #254f7b;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.primary-btn:hover {
+    background-color: rgb(113, 53, 169);
+}
+
+.otp-btn{
+    background:#007bff;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    font-size:16px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.otp-box{
+    margin-top:15px;
+    padding:15px;
+    background: rgb(158, 239, 158);
+    border-radius:10px;
+    font-size:18px;
+}
+
+.caregiver-box{
+    margin-top: 10px;
+    background: #eef2f7;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.caregiver-box h4{
+    margin: 0 0 6px;
+    font-size: 15px;
+    color: #2c3e50;
+}
