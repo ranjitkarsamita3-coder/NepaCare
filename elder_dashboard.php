@@ -20,31 +20,30 @@ $activePage = 'home';
 <html>
 <head>
     <title>Elder Dashboard - NepaCare</title>
-    <link rel="stylesheet" href="assets/css/elderstyle.css">
+    <link rel="stylesheet" href="assets/css/caregiverstyle.css">
     <style>
-        body { font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; display: flex; }
-        .sidebar { width: 220px; background: #f0f0f0; padding: 20px; height: 100vh; }
-        .sidebar a { display: block; padding: 10px 0; text-decoration: none; color: #333; }
-        .sidebar a:hover, .sidebar a.active { background: #ddd; }
-        .content { flex: 1; padding: 20px; }
-        h1 { color: #2c3e50; }
+        .page-wrapper { display: flex; min-height: 100vh; }
+        h1 { color: #b43113; }
         .message { background:#d4edda; padding:10px; margin-bottom:10px; }
         .otp-btn {
             font-family: 'Times New Roman', Times, serif;
-            background: #007bff;
+            background: #3b82f6;
             color: white;
-            padding: 8px 12px;
+            padding: 10px 18px;
             border: none;
             cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
-        .otp-btn:hover { background: #0056b3; }
+        .otp-btn:hover { background: #2563eb; transform: translateY(-2px); }
     </style>
 </head>
 <body>
 
-<?php include 'components/sidebar.php'; ?>
+<div class="page-wrapper">
+    <?php include 'components/sidebar.php'; ?>
 
-<div class="content">
+    <div class="content">
     <h1>Welcome, <?php echo $_SESSION['name']; ?>!</h1>
     <h2>About NepaCare</h2>
     <p>
@@ -53,6 +52,8 @@ $activePage = 'home';
         to do something important. This system ensures you never miss a task and helps
         caregivers stay informed.
     </p>
+    </div>
 </div>
+
 </body>
 </html>

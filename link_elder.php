@@ -48,14 +48,14 @@ if(isset($_POST['link_elder'])){
         <?php endif; ?>
 
         <?php if($linked_elder): ?>
-            <div class="linked-elder">
-                <h2>Currently Linked Elder</h2>
-                <p><strong>Name:</strong> <?php echo htmlspecialchars($linked_elder['name']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($linked_elder['email']); ?></p>
-            </div>
+            <h2>Currently Linked Elder</h2>
+            <p><strong>Name:</strong> <?php echo htmlspecialchars($linked_elder['name']); ?></p>
+            <p><strong>Email:</strong> <?php echo htmlspecialchars($linked_elder['email']); ?></p>
         <?php endif; ?>
 
-        <h1>Link Elder</h1>
+        <hr>
+
+        <h2>Link Elder</h2>
         <form method="POST">
             <label>Elder Phone Number</label>
             <input type="text" name="elder_phone" required>

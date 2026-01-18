@@ -9,6 +9,8 @@ if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'elder'){
 }
 
 $user_id = $_SESSION['user_id'];
+$role = $_SESSION['role'];
+$activePage = 'reminders';
 $message = "";
 
 // MARK DONE
@@ -107,19 +109,19 @@ if($result && mysqli_num_rows($result) > 0){
 <html>
 <head>
     <title>Reminders - NepaCare</title>
-    <link rel="stylesheet" href="assets/css/elderstyle.css">
     <link rel="stylesheet" href="assets/css/caregiverstyle.css">
     <style>
-        body { font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; display: flex; }
+        .page-wrapper { display: flex; min-height: 100vh; }
+        h1 { color: #b43113; }
         /* Fix default light buttons */
         button {
             font-family: 'Times New Roman', Times, serif;
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 6px 12px;
+            padding: 10px 18px;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
         }
@@ -149,20 +151,10 @@ if($result && mysqli_num_rows($result) > 0){
 </head>
 <body>
 
-<div class="sidebar">
-    <div class="logo-container" style="text-align:center; margin-bottom:20px;">
-        <img src="assets/images/logo.png" alt="NepaCare" class="logo">
-    </div>
+<div class="page-wrapper">
+    <?php include 'components/sidebar.php'; ?>
 
-    <h3>NepaCare</h3>
-    <a href="elder_dashboard.php">Home</a>
-    <a href="reminders.php">Reminders</a>
-    <a href="profile.php">Profile</a>
-    <a href="elder_linked.php">Linked Caregiver</a> 
-    <a href="logout.php">Logout</a>
-</div>
-
-<div class="content">
+    <div class="content">
 <h1>Manage Reminders</h1>
     <?php if(mysqli_num_rows($missed) > 0): ?>
     <div style="background:#ffe6e6; padding:15px; margin-bottom:20px; border-radius:8px;">
@@ -308,4 +300,6 @@ setInterval(checkReminders, 1000);
         </form>
     </div>
 </div>
+
+</body>
 </html>

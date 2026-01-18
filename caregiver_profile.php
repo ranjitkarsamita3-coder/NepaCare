@@ -8,6 +8,8 @@ if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'caregiver'){
 }
 
 $user_id = $_SESSION['user_id'];
+$role = $_SESSION['role'];
+$activePage = 'profile';
 $message = "";
 
 $result = mysqli_query($conn, "SELECT * FROM users WHERE id='$user_id'");
@@ -49,6 +51,9 @@ if(isset($_POST['update_profile'])){
 <head>
     <title>Caregiver Profile - NepaCare</title>
     <link rel="stylesheet" href="assets/css/caregiverstyle.css">
+    <style>
+        .profile-box { background:#f9f9f9; padding:20px; max-width:400px; border:1px solid #ccc; }
+    </style>
 </head>
 <body>
 <div class="page-wrapper">

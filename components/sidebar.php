@@ -1,6 +1,4 @@
 <?php
-// Sidebar component
-// $role = 'elder' or 'caregiver', $activePage highlights current page
 if(!isset($role)) $role = 'guest';
 if(!isset($activePage)) $activePage = '';
 ?>

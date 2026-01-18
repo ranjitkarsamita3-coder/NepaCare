@@ -8,6 +8,8 @@ if(!isset($_SESSION['user_id'])){
 }
 
 $user_id = $_SESSION['user_id'];
+$role = $_SESSION['role'];
+$activePage = 'profile';
 $message = "";
 
 // Fetch user info
@@ -79,38 +81,21 @@ if(isset($_POST['update_profile'])){
 <html>
 <head>
     <title>Profile - NepaCare</title>
-    <link rel="stylesheet" href="assets/css/elderstyle.css">
+    <link rel="stylesheet" href="assets/css/caregiverstyle.css">
     <style>
-        body { font-family: 'Times New Roman', Times, serif; margin:0; padding:0; display:flex; }
-        .sidebar { width:200px; background:#f0f0f0; padding:20px; height:100vh; }
-        .sidebar a { display:block; padding:10px 0; text-decoration:none; color:#333; }
-        .sidebar a:hover { background:#ddd; }
-        .content { flex:1; padding:20px; }
+        .page-wrapper { display: flex; min-height: 100vh; }
         .profile-box { background:#f9f9f9; padding:20px; max-width:400px; border:1px solid #ccc; }
+        .profile-box h3 { margin-top:0; color:#2c3e50; }
         input, button { font-size:16px; padding:6px; margin:5px 0; width:100%; box-sizing:border-box; }
         .success { background:#d4edda; padding:10px; margin-bottom:10px; }
-        .profile-box h3{
-            margin-top:0;
-            color:#2c3e50;
-        }
     </style>
 </head>
 <body>
 
-<div class="sidebar">
-    <div class="logo-container" style="text-align:center; margin-bottom:20px;">
-        <img src="assets/images/logo.png" alt="NepaCare" class="logo">
-    </div>
+<div class="page-wrapper">
+    <?php include 'components/sidebar.php'; ?>
 
-    <h3>NepaCare</h3>
-    <a href="elder_dashboard.php">Home</a>
-    <a href="reminders.php">Reminders</a>
-    <a href="profile.php">Profile</a>
-    <a href="elder_linked.php">Linked Caregiver</a> 
-    <a href="logout.php">Logout</a>
-</div>
-
-<div class="content">
+    <div class="content">
     <h1>Profile</h1>
 
     <?php if($message != ""): ?>
@@ -146,6 +131,9 @@ function updateTime(){
 setInterval(updateTime, 1000);
 updateTime();
 </script>
+
+    </div>
+</div>
 
 </body>
 </html>
