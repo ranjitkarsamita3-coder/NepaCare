@@ -1,4 +1,9 @@
 
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 body {
     margin: 0;
     font-family: "Times New Roman", Times, serif;
@@ -6,6 +11,12 @@ body {
 
     /* background-color:#7bbde3 ; */
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main, .container, .content {
+    flex: 1;
 }
 
 .navbar {
@@ -28,5 +39,8 @@ body {
     background: #2c3e50;
     color: white;
     text-align: center;
-    padding: 10px;
+    padding: 15px;
+    margin-top: auto;
+    width: 100%;
+    box-sizing: border-box;
 }
