@@ -1,0 +1,42 @@
+/* colors.css */
+:root {
+    /* Primary shades (blue) */
+    --primary-50: #e6f2fa;
+    --primary-100: #c0daf2;
+    --primary-200: #99c1ea;
+    --primary-300: #73a9e2;
+    --primary-400: #4c91da;
+    --primary-500: #2679d2; /* main primary */
+    --primary-600: #1f61aa;
+    --primary-700: #174b82;
+    --primary-800: #10355a;
+    --primary-900: #081c32;
+
+    /* Secondary shades (white/light gray) */
+    --secondary-50: #ffffff;
+    --secondary-100: #fefefe;
+    --secondary-200: #fcfcfc;
+    --secondary-300: #fafafa;
+    --secondary-400: #f7f7f7;
+    --secondary-500: #f5f5f5; /* main secondary */
+    --secondary-600: #e0e0e0;
+    --secondary-700: #c8c8c8;
+    --secondary-800: #aaaaaa;
+    --secondary-900: #888888;
+
+    /* Accent shades (red/orange) */
+    --accent-50: #ffe8e0;
+    --accent-100: #ffc1b3;
+    --accent-200: #ff9986;
+    --accent-300: #ff7159;
+    --accent-400: #ff482c;
+    --accent-500: #ff1f00; /* main accent */
+    --accent-600: #cc1900;
+    --accent-700: #991300;
+    --accent-800: #660d00;
+    --accent-900: #330600;
+
+    /* Text & background */
+    --text-color: #676767;
+    --background-color: #f5f5f5;
+}

@@ -74,6 +74,13 @@ $result = mysqli_query($conn, "
     ORDER BY reminder_date ASC, reminder_time ASC
 ");
 
+$missed = mysqli_query($conn, "
+    SELECT * FROM reminders
+    WHERE user_id='$user_id'
+    AND done=0
+    AND CONCAT(reminder_date,' ',reminder_time) < NOW()
+");
+
 $reminders = [];
 $jsArr = [];
 
@@ -85,10 +92,11 @@ if($result && mysqli_num_rows($result) > 0){
         if($row['done'] == 0){
             $reminder_datetime = $row['reminder_date'] . ' ' . $row['reminder_time'];
             if(strtotime($reminder_datetime) >= time()){
-                $jsArr[] = [
-                    "time" => $reminder_datetime,
-                    "msg"  => $row['reminder_text']
-                ];
+            $jsArr[] = [
+                "id"   => $row['id'],
+                "time" => $reminder_datetime,
+                "msg"  => $row['reminder_text']
+            ];
             }
         }
     }
@@ -142,7 +150,6 @@ if($result && mysqli_num_rows($result) > 0){
 <body>
 
 <div class="sidebar">
-    <!-- Logo -->
     <div class="logo-container" style="text-align:center; margin-bottom:20px;">
         <img src="assets/images/logo.png" alt="NepaCare" class="logo">
     </div>
@@ -151,11 +158,24 @@ if($result && mysqli_num_rows($result) > 0){
     <a href="elder_dashboard.php">Home</a>
     <a href="reminders.php">Reminders</a>
     <a href="profile.php">Profile</a>
+    <a href="elder_linked.php">Linked Caregiver</a> 
     <a href="logout.php">Logout</a>
 </div>
 
 <div class="content">
 <h1>Manage Reminders</h1>
+    <?php if(mysqli_num_rows($missed) > 0): ?>
+    <div style="background:#ffe6e6; padding:15px; margin-bottom:20px; border-radius:8px;">
+        <h3 style="color:red;">⚠ Missed Reminders</h3>
+
+        <?php while($m = mysqli_fetch_assoc($missed)): ?>
+            <p>
+                <b><?php echo htmlspecialchars($m['reminder_text']); ?></b>
+                (<?php echo $m['reminder_date']." ".$m['reminder_time']; ?>)
+            </p>
+        <?php endwhile; ?>
+    </div>
+    <?php endif; ?>
 
 <?php if($message != ""): ?>
     <div class="success"><?php echo $message; ?></div>
@@ -201,7 +221,17 @@ if(!empty($reminders)){
         echo "<td>{$row['reminder_text']}</td>";
         echo "<td>{$row['reminder_date']}</td>";
         echo "<td>{$row['reminder_time']}</td>";
-        echo "<td>" . ($row['done'] ? "Done" : "Pending") . "</td>";
+        $reminderTime = strtotime($row['reminder_date'].' '.$row['reminder_time']);
+        $isPast = $reminderTime < time();
+        echo "<td>";
+        if ($row['done'] == 1) {
+            echo "<span style='color:green;'>Done</span>";
+        } elseif ($isPast) {
+            echo "<span style='color:red;'>Missed</span>";
+        } else {
+            echo "<span style='color:orange;'>Pending</span>";
+        }
+        echo "</td>";
 
         // MARK DONE
         echo "<td>";
@@ -245,22 +275,37 @@ function checkReminders(){
 
     reminders.forEach(function(r){
         var t = new Date(r.time);
-        var key = r.time;
 
-        if(!r.alerted && t <= now){
+        if (!r.alerted && t <= now) {
             r.alerted = true;
-            alert("Reminder: " + r.msg);
 
-            reminderIntervals[key] = setInterval(function(){
+            document.getElementById("popupText").innerText = r.msg;
+            document.getElementById("popupReminderId").value = r.id;
+
+            document.getElementById("reminderPopup").style.display = "block";
+
+            setInterval(function(){
                 document.getElementById("reminderSound").play();
             }, 5000);
         }
     });
 }
-
 setInterval(checkReminders, 1000);
 </script>
 
 </div>
 </body>
+<div id="reminderPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6);">
+    <div style="background:#fff; padding:20px; max-width:400px; margin:150px auto; text-align:center; border-radius:10px;">
+        <h2>Reminder</h2>
+        <p id="popupText"></p>
+
+        <form method="POST">
+            <input type="hidden" name="reminder_id" id="popupReminderId">
+            <button name="mark_done" style="padding:10px 20px; font-size:18px;">
+                Mark as Done
+            </button>
+        </form>
+    </div>
+</div>
 </html>
