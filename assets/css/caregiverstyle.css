@@ -1,115 +1,335 @@
-/* caregiver_reminders.css - simple, like elder */
-
-/* Body and layout */
 body {
-    font-family: 'Times New Roman', Times, serif, sans-serif;
+    font-family: 'Times New Roman', Times, serif;
     margin: 0;
     padding: 0;
     display: flex;
+    background-color: rgb(251, 247, 247);
+    color: #333;
 }
 
+.page-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar .logo {
+    max-width: 100px;   
+    height: 100px;
+    border-radius: 15px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 20px;
+    border: 2px solid #fff;
+}
+
+
 .sidebar {
-    width: 200px;
-    background: #f0f0f0;
-    padding: 20px;
-    height: 100vh;
+    width: 250px;
+    background-color: #1e3a8a;
+    color: #fefefe;
+    padding: 30px 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h3 {
+    text-align: left;
+    font-size: 24px;
 }
 
 .sidebar a {
     display: block;
-    padding: 10px 0;
+    padding: 12px 15px;
+    margin-bottom: 10px;
     text-decoration: none;
-    color: #333;
+    color: #fefefe;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
-.sidebar a:hover {
-    background: #ddd;
+.sidebar a:hover, .sidebar a.active {
+    background-color: #3478e5;
+    color: #fd866b;
+    transform: translateX(5px);
 }
 
 .content {
     flex: 1;
-    padding: 20px;
+    padding: 30px;
+    overflow-y: auto;
 }
 
-/* Reminder table */
-table {
-    border-collapse: collapse;
-    width: 100%;
-    max-width: 800px;
-    margin-top: 20px;
+.content h1 {
+    color: #b43113;
+    margin-bottom: 20px;
 }
 
-th, td {
-    border: 1px solid #ccc;
+.content h2 {
+    color: #de7c67;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.intro p {
+    line-height: 1.7;
+    font-size: 15px;
+    color: #36404d;
+}
+
+/* ==========================
+   Reminder Form
+========================== */
+form input[type="text"],
+form input[type="date"],
+form input[type="time"] {
     padding: 10px;
-    text-align: center;
-}
-
-th {
-    background: #007BFF;
-    color: white;
-}
-
-tr:nth-child(even) {
-    background: #f2f2f2;
-}
-
-/* Buttons */
-button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-}
-
-.edit-btn {
-    background: #28a745;
-}
-
-.edit-btn:hover {
-    background: #218838;
-}
-
-.delete-btn {
-    background: #dc3545;
-}
-
-.delete-btn:hover {
-    background: #c82333;
-}
-
-/* Form inputs */
-input, select {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    margin: 8px 0;
+    border: 1px solid #fd866b;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
     box-sizing: border-box;
 }
 
-button.add-btn {
-    background: #007BFF;
+form input[type="text"]:focus,
+form input[type="date"]:focus,
+form input[type="time"]:focus {
+    border-color: #3b82f6;
+    outline: none;
 }
 
-button.add-btn:hover {
-    background: #0056b3;
+button, .btn {
+    display: inline-block;
+    padding: 10px 18px;
+    margin: 5px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    background-color: #3b82f6;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
 }
 
-/* Messages */
-.success {
-    background: #d4edda;
+button:hover, .btn:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+button[name="delete_reminder"] {
+    background-color: #ef4444;
+}
+
+button[name="delete_reminder"]:hover {
+    background-color: #dc2626;
+}
+
+button[name="update_reminder"] {
+    background-color: #10b981;
+}
+
+button[name="update_reminder"]:hover {
+    background-color: #059669;
+}
+
+/* ==========================
+   Reminder Table
+========================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #f4f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+table th, table td {
+    background-color: #f4f0f0;
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+    border: 1px solid #fd866b;
+
+}
+
+table th {
+    background-color: #f89c87;
+    color: #fff;
+    font-weight: 600;
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+.done td {
+    color: black;
+}
+
+/* ==========================
+   Profile Page Boxes
+=========================== */
+.profile-box {
+    background-color: #f6d4d4;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #fd866b;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 450px;
+    margin-bottom: px;
+}
+
+/* Labels */
+.profile-box label {
+    display: block;
+    font-weight: 600;
+    margin: 10px 0 5px 0;
+    color: #36404d;
+}
+
+/* Inputs */
+.profile-box input[type="text"],
+.profile-box input[type="email"],
+.profile-box input[type="password"],
+.profile-box input[type="tel"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #fd866b;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.profile-box input[type="text"]:focus,
+.profile-box input[type="email"]:focus,
+.profile-box input[type="password"]:focus,
+.profile-box input[type="tel"]:focus {
+    border-color: #3b82f6;
+    outline: none;
+}
+
+/* Buttons */
+.profile-box button {
+    background-color: #3b82f6;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.profile-box button:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+/* Success / Error Message */
+.success, .msg {
+    background-color: #d4edda;
     color: #155724;
     padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
+    border-radius: 10px;
+    margin-bottom: 15px;
 }
 
-.error {
-    background: #f8d7da;
-    color: #721c24;
+.profile-box button:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+
+/* ==========================
+   Link Elder Page Boxes
+=========================== */
+.link-elder-box {
+    background-color: #f3f4f6; /* light gray box */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 450px;
+    margin-bottom: 20px;
+}
+
+/* Labels */
+.link-elder-box label {
+    display: block;
+    font-weight: 600;
+    margin: 10px 0 5px 0;
+    color: #1e3a8a;
+}
+
+/* Inputs */
+.link-elder-box input[type="text"],
+.link-elder-box input[type="number"] {
+    width: 100%;
     padding: 10px;
+    font-size: 15px;
     margin-bottom: 10px;
-    border-radius: 5px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.link-elder-box input[type="text"]:focus,
+.link-elder-box input[type="number"]:focus {
+    border-color: #3b82f6;
+    outline: none;
+}
+
+/* Buttons */
+.link-elder-box button {
+    background-color: #3b82f6;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.link-elder-box button:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+/* Success / Error Message */
+.msg {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* Currently linked elder info */
+.linked-elder {
+    background-color: #e0e3e8;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.linked-elder h2 {
+    color: #1e3471;
+    margin-bottom: 10px;
+}
+
+.linked-elder p {
+    font-weight: 600;
+    color: #1e40af;
+    margin: 5px 0;
 }

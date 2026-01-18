@@ -98,7 +98,6 @@ if(isset($_POST['update_profile'])){
 <body>
 
 <div class="sidebar">
-    <!-- Logo -->
     <div class="logo-container" style="text-align:center; margin-bottom:20px;">
         <img src="assets/images/logo.png" alt="NepaCare" class="logo">
     </div>
@@ -107,6 +106,7 @@ if(isset($_POST['update_profile'])){
     <a href="elder_dashboard.php">Home</a>
     <a href="reminders.php">Reminders</a>
     <a href="profile.php">Profile</a>
+    <a href="elder_linked.php">Linked Caregiver</a> 
     <a href="logout.php">Logout</a>
 </div>
 
@@ -135,16 +135,6 @@ if(isset($_POST['update_profile'])){
 
         <p><strong>Role:</strong> <?php echo htmlspecialchars($user['role']); ?></p>
         <p><strong>Current Time:</strong> <span id="currentTime"></span></p>
-    </div>
-    <div class="profile-box" style="margin-top:20px;">
-        <h3>Linked Account</h3>
-
-        <?php if(!empty($linked)): ?>
-            <p><strong>Name:</strong> <?= htmlspecialchars($linked['name']) ?></p>
-            <p><strong>Email:</strong> <?= htmlspecialchars($linked['email']) ?></p>
-        <?php else: ?>
-            <p style="color:red;">Not linked yet</p>
-        <?php endif; ?>
     </div>
 </div>
 <script>
