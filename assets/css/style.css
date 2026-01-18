@@ -1,18 +1,13 @@
-
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
 body {
     margin: 0;
     font-family: "Times New Roman", Times, serif;
    background: radial-gradient(circle at top, var(--secondary-300), var(--primary-300));
-
-    /* background-color:#7bbde3 ; */
     min-height: 100vh;
+}
+
+.page-wrapper {
     display: flex;
-    flex-direction: column;
+    flex: 1;
 }
 
 main, .container, .content {

@@ -183,7 +183,7 @@ table tr:last-child td {
     border: 1px solid #fd866b;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     max-width: 450px;
-    margin-bottom: px;
+    margin-bottom: 20px;
 }
 
 /* Labels */
@@ -194,27 +194,15 @@ table tr:last-child td {
     color: #36404d;
 }
 
-/* Inputs */
-.profile-box input[type="text"],
-.profile-box input[type="email"],
-.profile-box input[type="password"],
-.profile-box input[type="tel"] {
+.profile-box input {
     width: 100%;
-    padding: 10px;
+    height: 42px;              /* same height for all */
+    padding: 10px 12px;
     font-size: 15px;
-    margin-bottom: 10px;
+    box-sizing: border-box;    /* VERY IMPORTANT */
     border: 1px solid #fd866b;
     border-radius: 8px;
     background-color: #fff;
-    transition: all 0.3s ease;
-}
-
-.profile-box input[type="text"]:focus,
-.profile-box input[type="email"]:focus,
-.profile-box input[type="password"]:focus,
-.profile-box input[type="tel"]:focus {
-    border-color: #3b82f6;
-    outline: none;
 }
 
 /* Buttons */
