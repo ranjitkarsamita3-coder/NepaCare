@@ -1,4 +1,4 @@
-<?php include "components/header.php"; ?>
+<?php define('STICKY_FOOTER', true); include "components/header.php"; ?>
 <link rel="stylesheet" href="assets/css/colors.css"> 
 
 <h1>Contact NepaCare</h1>
