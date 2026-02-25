@@ -48,7 +48,9 @@ if (isset($_POST['login'])) {
                 if (isset($_POST['remember'])) {
                     $token = bin2hex(random_bytes(16));
                     mysqli_query($conn, "UPDATE users SET remember_token='$token' WHERE id='{$user['id']}'");
-                    setcookie("remember_token", $token, time() + (86400 * 30), "/");
+                    // set cookie with httponly flag; secure flag enabled when using HTTPS
+                    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+                    setcookie("remember_token", $token, time() + (86400 * 30), "/", "", $secure, true);
                 }
 
                 header("Location: " . ($user['role'] === 'elder' ? "elder_dashboard.php" : "caregiver_dashboard.php"));
@@ -89,6 +91,9 @@ if (isset($_POST['login'])) {
                 placeholder="Password"
                 required>
             <span class="eye" onclick="togglePassword()">👁</span>
+        </div>
+        <div style="margin:8px 0 16px 0;">
+            <label style="font-size:14px;"><input type="checkbox" name="remember" value="1"> Remember me</label>
         </div>
 
         <input type="submit" name="login" value="Login">

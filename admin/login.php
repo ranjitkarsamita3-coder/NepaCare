@@ -94,6 +94,14 @@ if(isset($_POST['login'])){
             text-decoration: none;
         }
         .back-link a:hover { text-decoration: underline; }
+        /* Remember-me custom checkbox */
+        .remember-box { position: relative; display: inline-block; padding-left: 28px; cursor: pointer; user-select: none; color: #333; }
+        .remember-box input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+        .remember-box .checkmark { position: absolute; left: 0; top: 0; height: 18px; width: 18px; background: #fff; border: 1px solid #ccc; border-radius: 4px; }
+        .remember-box input:checked ~ .checkmark { background: #1e3a8a; border-color: #1e3a8a; }
+        .remember-box .checkmark:after { content: ""; position: absolute; display: none; left: 5px; top: 1px; width: 5px; height: 10px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+        .remember-box input:checked ~ .checkmark:after { display: block; }
+        .remember-container { display: block; margin-top: 8px; margin-bottom: 16px; }
     </style>
 </head>
 <body>
@@ -114,6 +122,12 @@ if(isset($_POST['login'])){
         <div class="form-group">
             <label>Password</label>
             <input type="password" name="password" placeholder="Enter password" required>
+        </div>
+        <div class="form-group remember-container">
+            <label class="remember-box">Remember me
+                <input type="checkbox" name="remember" value="1">
+                <span class="checkmark"></span>
+            </label>
         </div>
         
         <button type="submit" name="login">Login</button>
