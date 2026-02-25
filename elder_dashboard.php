@@ -2,7 +2,6 @@
 session_start();
 include 'config/db.php';
 
-// Block access if not logged in or not elder
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'elder'){
     header("Location: login.php");
     exit;
@@ -11,7 +10,6 @@ if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'elder'){
 $user_id = $_SESSION['user_id'];
 $message = "";
 
-// Set role and active page for sidebar
 $role = 'elder';
 $activePage = 'home';
 ?>

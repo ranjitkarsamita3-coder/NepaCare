@@ -12,7 +12,6 @@ $role = 'elder';
 $activePage = 'linked';
 $message = "";
 
-// Generate OTP
 if(isset($_POST['generate_otp'])){
     $otp = rand(100000, 999999);
     $expiry = time() + 600;
@@ -26,14 +25,12 @@ if(isset($_POST['generate_otp'])){
     $message = "OTP generated successfully";
 }
 
-// Fetch OTP data
 $otpData = mysqli_fetch_assoc(
     mysqli_query($conn,
     "SELECT otp, UNIX_TIMESTAMP(otp_expires_at) AS exp 
      FROM users WHERE id='$user_id'")
 );
 
-// Fetch linked caregiver
 $caregiver = mysqli_fetch_assoc(
     mysqli_query($conn,
     "SELECT name, email 

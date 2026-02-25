@@ -2,7 +2,6 @@
 session_start();
 include 'config/db.php';
 
-// Only caregiver
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'caregiver'){
     header("Location: login.php");
     exit;
@@ -10,7 +9,6 @@ if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'caregiver'){
 
 $caregiver_id = $_SESSION['user_id'];
 
-// Fetch linked elder
 $elder = null;
 $check = mysqli_query($conn, "
     SELECT u.id, u.name 
@@ -31,7 +29,7 @@ if ($check && mysqli_num_rows($check) === 1) {
 </head>
 <body>
 
-<div class="page-wrapper"> <!-- Flex container -->
+<div class="page-wrapper"> 
 
     <?php include __DIR__ . '/components/careSidebar.php'; ?>
 

@@ -1,11 +1,9 @@
 <div class="top-nav">
-    <!-- Logo -->
     <a href="index.php" class="logo">
         <img src="assets/images/logo.png" alt="NepaCare Logo">
         <span>NepaCare</span>
     </a>
 
-    <!-- Links -->
     <div class="nav-links">
         <a href="index.php">Home</a>
         <a href="about.php">About Us</a>

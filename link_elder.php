@@ -10,14 +10,12 @@ if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'caregiver'){
 $caregiver_id = $_SESSION['user_id'];
 $message = "";
 
-// Fetch linked elder
 $linked_elder = null;
 $res = mysqli_query($conn,"SELECT id,name,email FROM users WHERE id=(SELECT linked_elder_id FROM users WHERE id='$caregiver_id')");
 if($res && mysqli_num_rows($res)==1){
     $linked_elder = mysqli_fetch_assoc($res);
 }
 
-// Handle linking new elder
 if(isset($_POST['link_elder'])){
     $phone = trim($_POST['elder_phone']);
     $otp = trim($_POST['otp']);

@@ -6,8 +6,8 @@
 <div class="section">
     <p>
         For any inquiries, feedback, or support, please contact us: <br><br>
-        <strong>Email:</strong> support@nepacare.com <br>
-        <strong>Phone:</strong> +977-9800000000 <br>
+        <strong>Email:</strong> nepacare2082@gmail.com <br>
+        <strong>Phone:</strong> +977-9841077161 <br>
         <strong>Address:</strong> Kathmandu, Nepal
     </p>
 </div>

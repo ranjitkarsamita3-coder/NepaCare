@@ -2,11 +2,8 @@ body {
     margin: 0;
     font-family: "Times New Roman", Times, serif;
     background: radial-gradient(circle at top, #fefefe, #7bbde3);
-    /* background-color:#7bbde3 ; */
     min-height: 100vh;
 }
-
-/* ================= LOGIN CARD ================= */
 .dark-card {
     max-width: 420px;
     margin: 80px auto;
@@ -24,7 +21,6 @@ body {
     color: var(--accent-400);
 }
 
-/* ================= INPUTS ================= */
 .dark-card input[type="text"],
 .dark-card input[type="password"] {
     width: 90%;
@@ -48,7 +44,6 @@ body {
     box-shadow: 0 0 0 2px rgba(77,163,255,0.25);
 }
 
-/* ================= PASSWORD ================= */
 .password-wrapper {
     position: relative;
 }
@@ -63,7 +58,6 @@ body {
     font-size: 18px;
 }
 
-/* ================= BUTTON ================= */
 .dark-card input[type="submit"] {
     width: 100%;
     padding: 15px;
@@ -82,7 +76,6 @@ body {
     box-shadow: 0 10px 25px rgba(0,176,255,0.5);
 }
 
-/* ================= LINKS ================= */
 .forgot {
     display: block;
     text-align: center;
@@ -103,7 +96,6 @@ body {
     text-decoration: none;
 }
 
-/* ================= ERROR ================= */
 .message-error {
     background: rgba(255,0,0,0.15);
     color: #ffb3b3;

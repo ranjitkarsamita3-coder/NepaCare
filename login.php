@@ -20,7 +20,6 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     }
 }
 
-/* LOGIN */
 if (isset($_POST['login'])) {
     $login_input = trim($_POST['login_input']);
     $password    = trim($_POST['password']);
@@ -68,7 +67,6 @@ if (isset($_POST['login'])) {
 <link rel="stylesheet" href="assets/css/colors.css">
 <link rel="stylesheet" href="assets/css/loginstyle.css">
 
-<!-- LOGIN BOX -->
 <div class="login-container dark-card">
     <h1>Welcome Back</h1>
 
@@ -109,19 +107,4 @@ if (isset($_POST['login'])) {
         field.type = field.type === "password" ? "text" : "password";
     }
 </script>
-
-
-<!-- <script>
-function togglePassword(btn) {
-    const field = document.getElementById("password");
-    if (field.type === "password") {
-        field.type = "text";
-        btn.innerText = "Hide";
-    } else {
-        field.type = "password";
-        btn.innerText = "Show";
-    }
-}
-</script> -->
-
 <?php include "components/footer.php"; ?>

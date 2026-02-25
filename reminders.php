@@ -2,7 +2,6 @@
 session_start();
 include 'config/db.php';
 
-// Block access if not logged in or not elder
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'elder'){
     header("Location: login.php");
     exit;
@@ -13,30 +12,28 @@ $role = $_SESSION['role'];
 $activePage = 'reminders';
 $message = "";
 
-// MARK DONE
 if(isset($_POST['mark_done'])){
     $rem_id = $_POST['reminder_id'];
     mysqli_query($conn, "UPDATE reminders SET done=1 WHERE id='$rem_id' AND user_id='$user_id'");
     $message = "Reminder marked as done!";
 }
 
-// DELETE REMINDER
 if(isset($_POST['delete_reminder'])){
     $rem_id = $_POST['reminder_id'];
     mysqli_query($conn, "DELETE FROM reminders WHERE id='$rem_id' AND user_id='$user_id'");
     $message = "Reminder deleted successfully!";
 }
 
-// EDIT REMINDER
 if(isset($_POST['edit_reminder'])){
     $rem_id = $_POST['reminder_id'];
     $new_text = trim($_POST['reminder_text']);
     $new_date = $_POST['reminder_date'];
     $new_time = $_POST['reminder_time'];
+    $new_frequency = $_POST['reminder_frequency'];
 
     if(!empty($new_text) && !empty($new_date) && !empty($new_time)){
         mysqli_query($conn, "UPDATE reminders 
-                             SET reminder_text='$new_text', reminder_date='$new_date', reminder_time='$new_time', done=0 
+                             SET reminder_text='$new_text', reminder_date='$new_date', reminder_time='$new_time', reminder_frequency='$new_frequency', done=0 
                              WHERE id='$rem_id' AND user_id='$user_id'");
         $message = "Reminder updated successfully!";
     } else {
@@ -44,22 +41,21 @@ if(isset($_POST['edit_reminder'])){
     }
 }
 
-// ADD REMINDER
 if(isset($_POST['add_reminder'])){
     $reminder_text = trim($_POST['reminder_text']);
     $reminder_date = $_POST['reminder_date'];
     $reminder_time = $_POST['reminder_time'];
+    $reminder_frequency = $_POST['reminder_frequency'];
 
     if(empty($reminder_text) || empty($reminder_date) || empty($reminder_time)){
         $message = "All fields are required.";
     } else {
-        $insert = mysqli_query($conn, "INSERT INTO reminders (user_id, reminder_text, reminder_date, reminder_time)
-                                        VALUES ('$user_id','$reminder_text','$reminder_date','$reminder_time')");
+        $insert = mysqli_query($conn, "INSERT INTO reminders (user_id, reminder_text, reminder_date, reminder_time, reminder_frequency)
+                                        VALUES ('$user_id','$reminder_text','$reminder_date','$reminder_time','$reminder_frequency')");
         $message = $insert ? "Reminder added successfully!" : "Failed to add reminder.";
     }
 }
 
-// EDIT FORM PREFILL
 $edit_reminder = null;
 if(isset($_GET['edit_id'])){
     $edit_id = $_GET['edit_id'];
@@ -69,7 +65,6 @@ if(isset($_GET['edit_id'])){
     }
 }
 
-// FETCH REMINDERS (ALL: pending + done)
 $result = mysqli_query($conn, "
     SELECT * FROM reminders 
     WHERE user_id='$user_id'
@@ -90,7 +85,6 @@ if($result && mysqli_num_rows($result) > 0){
     while($row = mysqli_fetch_assoc($result)){
         $reminders[] = $row;
 
-        // Only pending reminders for alarm
         if($row['done'] == 0){
             $reminder_datetime = $row['reminder_date'] . ' ' . $row['reminder_time'];
             if(strtotime($reminder_datetime) >= time()){
@@ -113,7 +107,6 @@ if($result && mysqli_num_rows($result) > 0){
     <style>
         .page-wrapper { display: flex; min-height: 100vh; }
         h1 { color: #b43113; }
-        /* Fix default light buttons */
         button {
             font-family: 'Times New Roman', Times, serif;
             background-color: #007bff;
@@ -130,7 +123,6 @@ if($result && mysqli_num_rows($result) > 0){
             background-color: #0056b3;
         }
 
-        /* Make Delete button red */
         button[name="delete_reminder"] {
             background-color: #dc3545;
         }
@@ -139,7 +131,6 @@ if($result && mysqli_num_rows($result) > 0){
             background-color: #c82333;
         }
 
-        /* Make Done button green */
         button[name="mark_done"] {
             background-color: #28a745;
         }
@@ -181,6 +172,13 @@ if($result && mysqli_num_rows($result) > 0){
            value="<?php echo $edit_reminder ? $edit_reminder['reminder_date'] : ''; ?>" required><br>
     <input type="time" name="reminder_time" 
            value="<?php echo $edit_reminder ? $edit_reminder['reminder_time'] : ''; ?>" required><br>
+    <select name="reminder_frequency" required>
+        <option value="">Select Frequency</option>
+        <option value="once" <?php echo ($edit_reminder && $edit_reminder['reminder_frequency'] == 'once') ? 'selected' : ''; ?>>Once</option>
+        <option value="daily" <?php echo ($edit_reminder && $edit_reminder['reminder_frequency'] == 'daily') ? 'selected' : ''; ?>>Daily</option>
+        <option value="weekly" <?php echo ($edit_reminder && $edit_reminder['reminder_frequency'] == 'weekly') ? 'selected' : ''; ?>>Weekly</option>
+        <option value="monthly" <?php echo ($edit_reminder && $edit_reminder['reminder_frequency'] == 'monthly') ? 'selected' : ''; ?>>Monthly</option>
+    </select><br>
 
     <?php if($edit_reminder): ?>
         <input type="hidden" name="reminder_id" value="<?php echo $edit_reminder['id']; ?>">
@@ -198,6 +196,7 @@ if($result && mysqli_num_rows($result) > 0){
     <th>Message</th>
     <th>Date</th>
     <th>Time</th>
+    <th>Frequency</th>
     <th>Status</th>
     <th>Mark Done</th>
     <th>Edit</th>
@@ -213,6 +212,8 @@ if(!empty($reminders)){
         echo "<td>{$row['reminder_text']}</td>";
         echo "<td>{$row['reminder_date']}</td>";
         echo "<td>{$row['reminder_time']}</td>";
+        $frequency = $row['reminder_frequency'] ?? 'once';
+        echo "<td>" . ucfirst($frequency) . "</td>";
         $reminderTime = strtotime($row['reminder_date'].' '.$row['reminder_time']);
         $isPast = $reminderTime < time();
         echo "<td>";
@@ -225,7 +226,6 @@ if(!empty($reminders)){
         }
         echo "</td>";
 
-        // MARK DONE
         echo "<td>";
         if($row['done'] == 0){
             echo "<form method='POST' style='margin:0;'>
@@ -237,10 +237,8 @@ if(!empty($reminders)){
         }
         echo "</td>";
 
-        // EDIT
         echo "<td><a href='reminders.php?edit_id={$row['id']}'>Edit</a></td>";
 
-        // DELETE
         echo "<td>
                 <form method='POST' style='margin:0;'>
                     <input type='hidden' name='reminder_id' value='{$row['id']}'>

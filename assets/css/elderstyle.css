@@ -1,11 +1,11 @@
 .logo {
-    width: 120px;           /* same width everywhere */
-    height: 120px;          /* same height */
-    border-radius: 20px;    /* rounded square */
-    object-fit: cover;      /* keeps aspect ratio without stretching */
+    width: 120px;       
+    height: 120px;     
+    border-radius: 20px;
+    object-fit: cover;  
     display: block;
     margin: 0 auto 10px auto;
-    border: 1px solid #ccc; /* optional border */
+    border: 1px solid #ccc; 
 }
 
 .primary-btn {
@@ -21,6 +21,30 @@
 
 .primary-btn:hover {
     background-color: rgb(113, 53, 169);
+}
+
+select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    background-color: white;
+    cursor: pointer;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+select:focus {
+    border-color: #254f7b;
+    outline: none;
+    box-shadow: 0 0 5px rgba(37, 79, 123, 0.3);
+}
+
+select option {
+    padding: 10px;
+    background-color: white;
+    color: #333;
 }
 
 .otp-btn{

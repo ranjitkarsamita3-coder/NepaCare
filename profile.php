@@ -12,31 +12,26 @@ $role = $_SESSION['role'];
 $activePage = 'profile';
 $message = "";
 
-// Fetch user info
 $result = mysqli_query($conn, "SELECT * FROM users WHERE id='$user_id'");
 $user = mysqli_fetch_assoc($result);
-// Fetch linked account info
 $linked = null;
-// If elder → find caregiver
 if($user['role'] == 'elder'){
     $linkedResult = mysqli_query($conn,
         "SELECT name, email FROM users WHERE linked_elder_id = '$user_id'"
     );
     $linked = mysqli_fetch_assoc($linkedResult);
 }
-// If caregiver → find elder
 if($user['role'] == 'caregiver' && !empty($user['linked_elder_id'])){
     $linkedResult = mysqli_query($conn,
         "SELECT name, email FROM users WHERE id = '".$user['linked_elder_id']."'"
     );
     $linked = mysqli_fetch_assoc($linkedResult);
 }
-// Handle profile update
 if(isset($_POST['update_profile'])){
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $phone = trim($_POST['phone']);
-    $password = trim($_POST['password']); // optional
+    $password = trim($_POST['password']);
 
     if(empty($name) || empty($phone) || empty($email)){
         $message = "Name, email, and phone cannot be empty.";
@@ -48,7 +43,6 @@ if(isset($_POST['update_profile'])){
         $message = "Invalid phone number. Must start with 97 or 98 and be 10 digits.";
     }
     else {
-        // Check if phone or email is unique (exclude current user)
         $check = mysqli_query($conn, "SELECT id FROM users WHERE (phone='$phone' OR email='$email') AND id!='$user_id'");
         if(mysqli_num_rows($check) > 0){
             $message = "Email or phone already in use by another user.";
@@ -66,7 +60,7 @@ if(isset($_POST['update_profile'])){
 
             if($update){
                 $message = "Profile updated successfully!";
-                $_SESSION['name'] = $name; // update session name
+                $_SESSION['name'] = $name;
                 $result = mysqli_query($conn, "SELECT * FROM users WHERE id='$user_id'");
                 $user = mysqli_fetch_assoc($result);
             } else {
@@ -86,8 +80,11 @@ if(isset($_POST['update_profile'])){
         .page-wrapper { display: flex; min-height: 100vh; }
         .profile-box { background:#f9f9f9; padding:20px; max-width:400px; border:1px solid #ccc; }
         .profile-box h3 { margin-top:0; color:#2c3e50; }
-        input, button { font-size:16px; padding:6px; margin:5px 0; width:100%; box-sizing:border-box; }
+        input, button, select { font-size:16px; padding:6px; margin:5px 0; width:100%; box-sizing:border-box; }
         .success { background:#d4edda; padding:10px; margin-bottom:10px; }
+        .password-wrapper { position: relative; }
+        .password-wrapper input { padding-right: 40px; }
+        .eye { position: absolute; right: 10px; top: 15px; cursor: pointer; font-size: 18px; user-select: none; }
     </style>
 </head>
 <body>
@@ -114,7 +111,10 @@ if(isset($_POST['update_profile'])){
             <input type="text" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" placeholder="Start with 97 or 98, 10 digits" required>
 
             <label>Change Password (leave blank to keep current)</label>
-            <input type="password" name="password" placeholder="New password">
+            <div class="password-wrapper">
+                <input type="password" id="password" name="password" placeholder="New password">
+                <span class="eye" onclick="togglePassword()">👁</span>
+            </div>
             <button type="submit" name="update_profile">Update Profile</button>
         </form>
 
@@ -123,7 +123,15 @@ if(isset($_POST['update_profile'])){
     </div>
 </div>
 <script>
-// Live clock for elder
+function togglePassword() {
+    var passwordField = document.getElementById('password');
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+    } else {
+        passwordField.type = 'password';
+    }
+}
+
 function updateTime(){
     var now = new Date();
     document.getElementById('currentTime').innerText = now.toLocaleString();

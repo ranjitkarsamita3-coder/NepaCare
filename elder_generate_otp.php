@@ -11,7 +11,7 @@ $user_id = $_SESSION['user_id'];
 $role = 'elder';
 $activePage = 'linked';
 $otp = rand(100000, 999999);
-$expiry = date("Y-m-d H:i:s", time() + 300); // 5 minutes
+$expiry = date("Y-m-d H:i:s", time() + 300);
 
 mysqli_query($conn, "
     UPDATE users 
