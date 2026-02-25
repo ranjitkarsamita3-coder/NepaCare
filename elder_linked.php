@@ -8,9 +8,10 @@ if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'elder'){
 }
 
 $user_id = $_SESSION['user_id'];
+$role = 'elder';
+$activePage = 'linked';
 $message = "";
 
-// Generate OTP
 if(isset($_POST['generate_otp'])){
     $otp = rand(100000, 999999);
     $expiry = time() + 600;
@@ -24,14 +25,12 @@ if(isset($_POST['generate_otp'])){
     $message = "OTP generated successfully";
 }
 
-// Fetch OTP data
 $otpData = mysqli_fetch_assoc(
     mysqli_query($conn,
     "SELECT otp, UNIX_TIMESTAMP(otp_expires_at) AS exp 
      FROM users WHERE id='$user_id'")
 );
 
-// Fetch linked caregiver
 $caregiver = mysqli_fetch_assoc(
     mysqli_query($conn,
     "SELECT name, email 
@@ -44,31 +43,19 @@ $caregiver = mysqli_fetch_assoc(
 <html>
 <head>
 <title>Linked Caregiver - NepaCare</title>
-<link rel="stylesheet" href="assets/css/elderstyle.css">
+<link rel="stylesheet" href="assets/css/caregiverstyle.css">
 <style>
-body { display:flex; font-family:'Times New Roman'; }
-.sidebar { width:200px; background:#f0f0f0; padding:20px; height:100vh; }
-.sidebar a { display:block; padding:10px 0; text-decoration:none; color:#333; }
-.sidebar a:hover { background:#ddd; }
-.content { flex:1; padding:20px; }
-.otp-box { background:#e9f7ef; padding:15px; margin-top:15px; }
-button { padding:10px 16px; background:#007bff; color:white; border:none; border-radius:6px; }
-button:hover { background:#0056b3; }
+.page-wrapper { display:flex; min-height:100vh; }
+.otp-box { background:#e9f7ef; padding:15px; margin-top:15px; border-radius:8px; }
+h2 { color: #de7c67; }
 </style>
 </head>
-
 <body>
 
-<div class="sidebar">
-    <img src="assets/images/logo.png" class="logo"><br><br>
-    <a href="elder_dashboard.php">Home</a>
-    <a href="reminders.php">Reminders</a>
-    <a href="elder_linked.php">Linked Caregiver</a>
-    <a href="profile.php">Profile</a>
-    <a href="logout.php">Logout</a>
-</div>
+<div class="page-wrapper">
+    <?php include 'components/sidebar.php'; ?>
 
-<div class="content">
+    <div class="content">
 
 <h2>Linked Caregiver</h2>
 
@@ -119,6 +106,9 @@ setInterval(otpCountdown, 1000);
 otpCountdown();
 <?php endif; ?>
 </script>
+
+    </div>
+</div>
 
 </body>
 </html>

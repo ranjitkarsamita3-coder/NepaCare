@@ -5,7 +5,6 @@ body {
     min-height: 100vh;
 }
 
-/* ================= SIGNUP CARD ================= */
 .dark-card {
     max-width: 420px;
     margin: 80px auto;
@@ -23,7 +22,6 @@ body {
     color: var(--accent-400);
 }
 
-/* ================= INPUTS ================= */
 .dark-card input[type="text"],
 .dark-card input[type="email"],
 .dark-card input[type="password"],
@@ -49,7 +47,6 @@ body {
     box-shadow: 0 0 0 2px rgba(77,163,255,0.25);
 }
 
-/* ================= PASSWORD ================= */
 .password-wrapper {
     position: relative;
     width: 100%;
@@ -66,11 +63,10 @@ body {
     top: 40%;
     transform: translateY(-50%);
     cursor: pointer;
-    color: #8aa4c5;
+    color: rgba(4, 54, 77, 0.5);
     font-size: 18px;
 }
 
-/* ================= BUTTON ================= */
 .dark-card input[type="submit"] {
     width: 100%;
     padding: 15px;
@@ -86,10 +82,9 @@ body {
 
 .dark-card input[type="submit"]:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0,176,255,0.5);
+    box-shadow: 0 10px 25px rgba(4, 54, 77, 0.5);
 }
 
-/* ================= LINKS ================= */
 .signup-link {
     text-align: center;
     margin-top: 22px;
@@ -106,7 +101,6 @@ body {
     text-decoration: underline;
 }
 
-/* ================= ERROR/SUCCESS ================= */
 .message-error {
     background: rgba(255,0,0,0.15);
     color: #ffb3b3;
@@ -125,13 +119,11 @@ body {
     text-align: center;
 }
 
-/* ================= CARD HOVER ================= */
 .dark-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(235, 146, 146, 0.2);
 }
 
-/* ================= SELECT ROLE ================= */
 .dark-card select {
     width: 100%;
     box-sizing: border-box;

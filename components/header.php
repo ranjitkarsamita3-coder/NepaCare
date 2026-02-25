@@ -41,6 +41,6 @@
         .section p { font-size:18px; line-height:1.5; }
     </style>
 </head>
-<body>
+<body <?php echo defined('STICKY_FOOTER') ? 'class="sticky-footer"' : ''; ?>>
 
 <?php include __DIR__ . "/navbar.php"; ?>

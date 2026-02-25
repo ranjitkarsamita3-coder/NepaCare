@@ -10,14 +10,12 @@ if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'caregiver'){
 $caregiver_id = $_SESSION['user_id'];
 $message = "";
 
-// Fetch linked elder
 $linked_elder = null;
 $res = mysqli_query($conn,"SELECT id,name,email FROM users WHERE id=(SELECT linked_elder_id FROM users WHERE id='$caregiver_id')");
 if($res && mysqli_num_rows($res)==1){
     $linked_elder = mysqli_fetch_assoc($res);
 }
 
-// Handle linking new elder
 if(isset($_POST['link_elder'])){
     $phone = trim($_POST['elder_phone']);
     $otp = trim($_POST['otp']);
@@ -48,14 +46,14 @@ if(isset($_POST['link_elder'])){
         <?php endif; ?>
 
         <?php if($linked_elder): ?>
-            <div class="linked-elder">
-                <h2>Currently Linked Elder</h2>
-                <p><strong>Name:</strong> <?php echo htmlspecialchars($linked_elder['name']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($linked_elder['email']); ?></p>
-            </div>
+            <h2>Currently Linked Elder</h2>
+            <p><strong>Name:</strong> <?php echo htmlspecialchars($linked_elder['name']); ?></p>
+            <p><strong>Email:</strong> <?php echo htmlspecialchars($linked_elder['email']); ?></p>
         <?php endif; ?>
 
-        <h1>Link Elder</h1>
+        <hr>
+
+        <h2>Link Elder</h2>
         <form method="POST">
             <label>Elder Phone Number</label>
             <input type="text" name="elder_phone" required>

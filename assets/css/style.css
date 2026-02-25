@@ -5,6 +5,11 @@ body {
     min-height: 100vh;
 }
 
+body.sticky-footer {
+    display: flex;
+    flex-direction: column;
+}
+
 .page-wrapper {
     display: flex;
     flex: 1;

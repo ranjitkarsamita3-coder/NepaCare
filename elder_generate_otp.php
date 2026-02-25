@@ -8,8 +8,10 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'elder') {
 }
 
 $user_id = $_SESSION['user_id'];
+$role = 'elder';
+$activePage = 'linked';
 $otp = rand(100000, 999999);
-$expiry = date("Y-m-d H:i:s", time() + 300); // 5 minutes
+$expiry = date("Y-m-d H:i:s", time() + 300);
 
 mysqli_query($conn, "
     UPDATE users 
@@ -22,8 +24,9 @@ mysqli_query($conn, "
 <html>
 <head>
     <title>Generate OTP - NepaCare</title>
+    <link rel="stylesheet" href="assets/css/caregiverstyle.css">
     <style>
-        body { font-family: 'Times New Roman', Times, serif; padding: 40px; text-align: center; }
+        .page-wrapper { display: flex; min-height: 100vh; }
         .otp-box {
             font-size: 36px;
             letter-spacing: 6px;
@@ -37,6 +40,11 @@ mysqli_query($conn, "
 </head>
 <body>
 
+<div class="page-wrapper">
+    <?php include 'components/sidebar.php'; ?>
+
+    <div class="content" style="text-align: center;">
+
 <h1>Link Caregiver</h1>
 <p>Share this OTP with your caregiver</p>
 
@@ -47,6 +55,9 @@ mysqli_query($conn, "
 <p>OTP valid for 5 minutes</p>
 
 <a href="elder_dashboard.php">Back</a>
+
+    </div>
+</div>
 
 </body>
 </html>

@@ -4,13 +4,12 @@ include 'config/db.php';
 
 $message = "";
 
-/* SIGNUP */
 if(isset($_POST['signup'])){
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $phone = trim($_POST['phone']);
     $password = trim($_POST['password']);
-    $role = trim($_POST['role']); // 'elder' or 'caregiver'
+    $role = trim($_POST['role']);
 
     if(!preg_match("/^(97|98)[0-9]{8}$/", $phone)){
         $message = "Invalid phone number. Must start with 97 or 98 and be 10 digits.";

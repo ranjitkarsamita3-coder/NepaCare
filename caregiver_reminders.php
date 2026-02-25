@@ -10,7 +10,6 @@ if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'caregiver'){
 $caregiver_id = $_SESSION['user_id'];
 $message = "";
 
-// Fetch linked elder
 $elder = null;
 $check = mysqli_query($conn, "
     SELECT u.id, u.name 
@@ -25,13 +24,13 @@ if($check && mysqli_num_rows($check) === 1){
     die("No linked elder found.");
 }
 
-// Add, update, delete reminders
 if(isset($_POST['add_reminder'])){
     $text = trim($_POST['reminder_text']);
     $date = $_POST['reminder_date'];
     $time = $_POST['reminder_time'];
+    $frequency = $_POST['reminder_frequency'];
     if($text && $date && $time){
-        mysqli_query($conn, "INSERT INTO reminders (user_id, reminder_text, reminder_date, reminder_time) VALUES ('$elder_id','$text','$date','$time')");
+        mysqli_query($conn, "INSERT INTO reminders (user_id, reminder_text, reminder_date, reminder_time, reminder_frequency) VALUES ('$elder_id','$text','$date','$time','$frequency')");
         $message = "Reminder added.";
     }
 }
@@ -40,7 +39,8 @@ if(isset($_POST['update_reminder'])){
     $text = trim($_POST['reminder_text']);
     $date = $_POST['reminder_date'];
     $time = $_POST['reminder_time'];
-    mysqli_query($conn, "UPDATE reminders SET reminder_text='$text', reminder_date='$date', reminder_time='$time', done=0 WHERE id='$id' AND user_id='$elder_id'");
+    $frequency = $_POST['reminder_frequency'];
+    mysqli_query($conn, "UPDATE reminders SET reminder_text='$text', reminder_date='$date', reminder_time='$time', reminder_frequency='$frequency', done=0 WHERE id='$id' AND user_id='$elder_id'");
     $message = "Reminder updated.";
 }
 if(isset($_POST['delete_reminder'])){
@@ -49,7 +49,6 @@ if(isset($_POST['delete_reminder'])){
     $message = "Reminder deleted.";
 }
 
-// Prefill for edit
 $edit = null;
 if(isset($_GET['edit_id'])){
     $id = $_GET['edit_id'];
@@ -57,7 +56,6 @@ if(isset($_GET['edit_id'])){
     $edit = mysqli_fetch_assoc($res);
 }
 
-// Fetch all reminders
 $result = mysqli_query($conn, "SELECT * FROM reminders WHERE user_id='$elder_id' ORDER BY reminder_date ASC, reminder_time ASC");
 ?>
 <!DOCTYPE html>
@@ -82,6 +80,13 @@ $result = mysqli_query($conn, "SELECT * FROM reminders WHERE user_id='$elder_id'
             <input type="text" name="reminder_text" placeholder="Message" value="<?php echo $edit['reminder_text'] ?? ''; ?>" required>
             <input type="date" name="reminder_date" value="<?php echo $edit['reminder_date'] ?? ''; ?>" required>
             <input type="time" name="reminder_time" value="<?php echo $edit['reminder_time'] ?? ''; ?>" required>
+            <select name="reminder_frequency" required>
+                <option value="">Select Frequency</option>
+                <option value="once" <?php echo ($edit && $edit['reminder_frequency'] == 'once') ? 'selected' : ''; ?>>Once</option>
+                <option value="daily" <?php echo ($edit && $edit['reminder_frequency'] == 'daily') ? 'selected' : ''; ?>>Daily</option>
+                <option value="weekly" <?php echo ($edit && $edit['reminder_frequency'] == 'weekly') ? 'selected' : ''; ?>>Weekly</option>
+                <option value="monthly" <?php echo ($edit && $edit['reminder_frequency'] == 'monthly') ? 'selected' : ''; ?>>Monthly</option>
+            </select>
             <?php if($edit): ?>
                 <input type="hidden" name="reminder_id" value="<?php echo $edit['id']; ?>">
                 <button name="update_reminder">Update</button>
@@ -97,6 +102,7 @@ $result = mysqli_query($conn, "SELECT * FROM reminders WHERE user_id='$elder_id'
                 <th>Message</th>
                 <th>Date</th>
                 <th>Time</th>
+                <th>Frequency</th>
                 <th>Status</th>
                 <th>Edit</th>
                 <th>Delete</th>
@@ -107,6 +113,7 @@ $result = mysqli_query($conn, "SELECT * FROM reminders WHERE user_id='$elder_id'
                     <td><?php echo htmlspecialchars($row['reminder_text']); ?></td>
                     <td><?php echo $row['reminder_date']; ?></td>
                     <td><?php echo $row['reminder_time']; ?></td>
+                    <td><?php echo ucfirst($row['reminder_frequency'] ?? 'once'); ?></td>
                     <td><?php echo $row['done']?'Done':'Pending'; ?></td>
                     <td><a href="caregiver_reminders.php?edit_id=<?php echo $row['id']; ?>">Edit</a></td>
                     <td>
