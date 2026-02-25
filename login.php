@@ -3,8 +3,6 @@ session_start();
 include 'config/db.php';
 
 $message = "";
-
-/* AUTO LOGIN USING REMEMBER ME */
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     $token = mysqli_real_escape_string($conn, $_COOKIE['remember_token']);
     $query = mysqli_query($conn, "SELECT * FROM users WHERE remember_token='$token' LIMIT 1");

@@ -15,7 +15,6 @@ $message = "";
 if(isset($_POST['mark_done'])){
     $rem_id = mysqli_real_escape_string($conn, $_POST['reminder_id']);
 
-    // fetch reminder to check frequency
     $rres = mysqli_query($conn, "SELECT * FROM reminders WHERE id='$rem_id' AND user_id='$user_id'");
     if($rres && mysqli_num_rows($rres) > 0){
         $r = mysqli_fetch_assoc($rres);
@@ -25,7 +24,6 @@ if(isset($_POST['mark_done'])){
             mysqli_query($conn, "UPDATE reminders SET done=1 WHERE id='$rem_id' AND user_id='$user_id'");
             $message = "Reminder marked as done!";
         } else {
-            // compute next occurrence based on frequency
             $dt = new DateTime($r['reminder_date'].' '.$r['reminder_time']);
             $now = new DateTime();
             do{
@@ -109,7 +107,6 @@ $missed = mysqli_query($conn, "
 $reminders = [];
 $jsArr = [];
 
-// Auto-advance recurring reminders that are in the past to their next future occurrence
 $all_res = mysqli_query($conn, "SELECT * FROM reminders WHERE user_id='$user_id'");
 if($all_res && mysqli_num_rows($all_res) > 0){
     $now = new DateTime();
@@ -118,7 +115,7 @@ if($all_res && mysqli_num_rows($all_res) > 0){
         if($r['done'] == 0 && $freq !== 'once'){
             $dt = new DateTime($r['reminder_date'].' '.$r['reminder_time']);
             if($dt < $now){
-                // advance until in future
+
                 do{
                     if($freq === 'daily') $dt->modify('+1 day');
                     elseif($freq === 'weekly') $dt->modify('+1 week');
@@ -132,7 +129,6 @@ if($all_res && mysqli_num_rows($all_res) > 0){
             }
         }
     }
-    // refresh missed and result queries after updates
     $result = mysqli_query($conn, "
         SELECT * FROM reminders 
         WHERE user_id='$user_id'

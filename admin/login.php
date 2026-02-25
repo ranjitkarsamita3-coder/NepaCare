@@ -94,7 +94,6 @@ if(isset($_POST['login'])){
             text-decoration: none;
         }
         .back-link a:hover { text-decoration: underline; }
-        /* Remember-me custom checkbox */
         .remember-box { position: relative; display: inline-block; padding-left: 28px; cursor: pointer; user-select: none; color: #333; }
         .remember-box input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
         .remember-box .checkmark { position: absolute; left: 0; top: 0; height: 18px; width: 18px; background: #fff; border: 1px solid #ccc; border-radius: 4px; }
@@ -116,7 +115,7 @@ if(isset($_POST['login'])){
     <form method="POST">
         <div class="form-group">
             <label>Email</label>
-            <input type="email" name="email" placeholder="admin@nepacare.com" required>
+            <input type="email" name="email" placeholder="Enter your email" required>
         </div>
         
         <div class="form-group">
