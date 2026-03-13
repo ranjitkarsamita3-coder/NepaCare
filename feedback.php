@@ -10,7 +10,6 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['elder', 'care
 $user_id = $_SESSION['user_id'];
 $role = $_SESSION['role'];
 
-// Ensure feedback table exists (creates or updates schema if missing)
 $createTableSql = "CREATE TABLE IF NOT EXISTS feedback (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -61,22 +60,25 @@ $activePage = 'feedback';
             border-radius: 12px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.1);
         }
+
         .feedback-form label {
             display: block;
             margin-top: 15px;
             font-weight: 600;
         }
-        .feedback-form textarea {
+
+        .feedback-form .input-box {
             width: 100%;
-            min-height: 140px;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #fd866b;
             border-radius: 8px;
             font-size: 15px;
-            resize: vertical;
+            box-sizing: border-box;
         }
-        .feedback-list {
-            margin-top: 30px;
+
+        .feedback-form textarea.input-box {
+            min-height: 140px;
+            resize: vertical;
         }
         .notice {
             padding: 12px 16px;
@@ -91,6 +93,34 @@ $activePage = 'feedback';
             color: #721c24;
             border-color: #f5c6cb;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            vertical-align: top; 
+        }
+        th {
+            background-color: #1e3a8a;
+            color: #fff;
+            text-align: left;
+        }
+        td.message-cell {
+            width: 50%; 
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        td.subject-cell {
+            width: 30%;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        tr:hover { background-color: #f9f9f9; }
     </style>
 </head>
 <body>
@@ -113,10 +143,12 @@ $activePage = 'feedback';
         <div class="feedback-form">
             <form method="POST">
                 <label for="subject">Subject (optional)</label>
-                <input type="text" id="subject" name="subject" value="<?php echo isset($subject)?htmlspecialchars($subject):''; ?>" placeholder="Subject">
+                <input type="text" id="subject" name="subject" 
+                    value="<?php echo isset($subject)?htmlspecialchars($subject):''; ?>" 
+                    placeholder="Subject" class="input-box">
 
                 <label for="message">Message</label>
-                <textarea id="message" name="message" placeholder="Tell us what you think..."><?php echo isset($message)?htmlspecialchars($message):''; ?></textarea>
+                <textarea id="message" name="message" placeholder="Tell us what you think" class="input-box"></textarea>
 
                 <button type="submit">Send Feedback</button>
             </form>
@@ -128,14 +160,14 @@ $activePage = 'feedback';
                 <table>
                     <tr>
                         <th>Date</th>
-                        <th>Subject</th>
-                        <th>Message</th>
+                        <th class="subject-cell">Subject</th>
+                        <th class="message-cell">Message</th>
                     </tr>
                     <?php while ($row = mysqli_fetch_assoc($feedbacks)): ?>
                         <tr>
                             <td><?php echo date('Y-m-d H:i', strtotime($row['created_at'])); ?></td>
-                            <td><?php echo htmlspecialchars($row['subject']); ?></td>
-                            <td><?php echo nl2br(htmlspecialchars($row['message'])); ?></td>
+                            <td class="subject-cell"><?php echo htmlspecialchars($row['subject']); ?></td>
+                            <td class="message-cell"><?php echo nl2br(htmlspecialchars($row['message'])); ?></td>
                         </tr>
                     <?php endwhile; ?>
                 </table>

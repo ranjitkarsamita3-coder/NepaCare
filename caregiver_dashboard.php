@@ -9,11 +9,10 @@ if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'caregiver'){
 
 $caregiver_id = $_SESSION['user_id'];
 
+// Get linked elder
 $elder = null;
-$cols = getExistingUserColumns($conn, ['id','name','email','phone','address','age']);
-$cols_sql = implode(', ', $cols);
 $check = mysqli_query($conn, "
-    SELECT $cols_sql
+    SELECT u.id, u.name, u.last_login 
     FROM users u
     JOIN users c ON c.linked_elder_id = u.id
     WHERE c.id = '$caregiver_id'
@@ -22,23 +21,96 @@ $check = mysqli_query($conn, "
 if ($check && mysqli_num_rows($check) === 1) {
     $elder = mysqli_fetch_assoc($check);
 }
+
+$role = 'caregiver';
+$activePage = 'home';
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Caregiver Dashboard - NepaCare</title>
     <link rel="stylesheet" href="assets/css/caregiverstyle.css">
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            margin: 0;
+            background: #fdf9f9;
+            color: #333;
+        }
+
+        .page-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .welcome-msg {
+            font-size: 28px;
+            font-weight: bold;
+            background-color: #fff5f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .last-seen {
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px #b43113;
+        }
+
+        .last-seen h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        .about-section {
+            font-size: 18px;
+            line-height: 1.6;
+            background-color: #fff5f0;
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
 
-<div class="page-wrapper"> 
-
+<div class="page-wrapper">
     <?php include __DIR__ . '/components/careSidebar.php'; ?>
 
     <div class="content">
-        <h1>Welcome, <?php echo htmlspecialchars($_SESSION['name']); ?>!</h1>
+        <div class="welcome-msg">
+            Welcome, <?= htmlspecialchars($_SESSION['name']) ?>!
+            <?php if($elder): ?>
+                <br>Linked Elder: <?= htmlspecialchars($elder['name']) ?>
+            <?php endif; ?>
+        </div>
 
-        <div class="intro">
+        <?php if($elder): ?>
+            <div class="last-seen">
+                <h2>Last Seen</h2>
+                <p>
+                    <?php 
+                        if(!empty($elder['last_login'])){
+                            echo date('F j, Y, h:i A', strtotime($elder['last_login']));
+                        } else {
+                            echo "No login records found.";
+                        }
+                    ?>
+                </p>
+            </div>
+        <?php endif; ?>
+
+        <div class="about-section">
             <h2>About NepaCare</h2>
             <p>
                 NepaCare is a simple reminder and care-support system designed
@@ -46,24 +118,7 @@ if ($check && mysqli_num_rows($check) === 1) {
                 by managing their reminders, checking schedules, and supporting daily tasks.
             </p>
         </div>
-
-        <?php if ($elder): ?>
-            <div class="intro">
-                <h2>Linked Elder Details</h2>
-                <p><strong>Name:</strong> <?= htmlspecialchars($elder['name']) ?></p>
-                <p><strong>Email:</strong> <?= htmlspecialchars($elder['email']) ?></p>
-                <p><strong>Phone:</strong> <?= htmlspecialchars($elder['phone'] ?? '') ?></p>
-                <p><strong>Age:</strong> <?= htmlspecialchars($elder['age'] ?? '') ?></p>
-                <p><strong>Address:</strong> <?= htmlspecialchars($elder['address'] ?? '') ?></p>
-            </div>
-        <?php else: ?>
-            <div class="intro">
-                <h2>Linked Elder</h2>
-                <p>No elder is currently linked. Go to <a href="link_elder.php">Link Elder</a> to connect with an elder.</p>
-            </div>
-        <?php endif; ?>
     </div>
-
 </div>
 
 </body>

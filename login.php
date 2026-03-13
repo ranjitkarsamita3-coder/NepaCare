@@ -4,6 +4,8 @@ include 'config/db.php';
 include_once __DIR__ . '/config/lang.php';
 
 $message = "";
+
+// Auto-login via remember_token
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     $token = mysqli_real_escape_string($conn, $_COOKIE['remember_token']);
     $query = mysqli_query($conn, "SELECT * FROM users WHERE remember_token='$token' LIMIT 1");
@@ -14,11 +16,15 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
         $_SESSION['role']    = $user['role'];
         $_SESSION['name']    = $user['name'];
 
+        // Update last login
+        mysqli_query($conn, "UPDATE users SET last_login = NOW() WHERE id='{$user['id']}'");
+
         header("Location: " . ($user['role'] === 'elder' ? "elder_dashboard.php" : "caregiver_dashboard.php"));
         exit;
     }
 }
 
+// Handle login form submission
 if (isset($_POST['login'])) {
     $login_input = trim($_POST['login_input']);
     $password    = trim($_POST['password']);
@@ -44,10 +50,13 @@ if (isset($_POST['login'])) {
                 $_SESSION['role']    = $user['role'];
                 $_SESSION['name']    = $user['name'];
 
+                // Update last login
+                mysqli_query($conn, "UPDATE users SET last_login = NOW() WHERE id='{$user['id']}'");
+
+                // Remember me
                 if (isset($_POST['remember'])) {
                     $token = bin2hex(random_bytes(16));
                     mysqli_query($conn, "UPDATE users SET remember_token='$token' WHERE id='{$user['id']}'");
-                    // set cookie with httponly flag; secure flag enabled when using HTTPS
                     $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
                     setcookie("remember_token", $token, time() + (86400 * 30), "/", "", $secure, true);
                 }
@@ -72,31 +81,32 @@ if (isset($_POST['login'])) {
     <h1><?php echo __('Welcome Back'); ?></h1>
 
     <?php if ($message): ?>
-        <div class="message-box message-error"><?= $message ?></div>
+        <div class="message-box message-error"><?= htmlspecialchars($message) ?></div>
     <?php endif; ?>
 
     <form method="POST">
-
         <input type="text"
-            name="login_input"
-            placeholder="<?php echo __('Email or Phone'); ?>"
-            value="<?= isset($_POST['login_input']) ? $_POST['login_input'] : ''; ?>"
-            required>
+               name="login_input"
+               placeholder="<?php echo __('Email or Phone'); ?>"
+               value="<?= isset($_POST['login_input']) ? htmlspecialchars($_POST['login_input']) : ''; ?>"
+               required>
 
         <div class="password-wrapper">
             <input type="password"
-                name="password"
-                id="password"
-                placeholder="<?php echo __('Password'); ?>"
-                required>
+                   name="password"
+                   id="password"
+                   placeholder="<?php echo __('Password'); ?>"
+                   required>
             <span class="eye" onclick="togglePassword()">👁</span>
         </div>
+
         <div style="margin:8px 0 16px 0;">
-            <label style="font-size:14px;"><input type="checkbox" name="remember" value="1"> <?php echo __('Remember me'); ?></label>
+            <label style="font-size:14px;">
+                <input type="checkbox" name="remember" value="1"> <?php echo __('Remember me'); ?>
+            </label>
         </div>
 
         <input type="submit" name="login" value="<?php echo __('Login'); ?>">
-
     </form>
 
     <p class="signup-link">
@@ -104,11 +114,11 @@ if (isset($_POST['login'])) {
     </p>
 </div>
 
-
 <script>
-    function togglePassword() {
-        const field = document.getElementById("password");
-        field.type = field.type === "password" ? "text" : "password";
-    }
+function togglePassword() {
+    const field = document.getElementById("password");
+    field.type = field.type === "password" ? "text" : "password";
+}
 </script>
+
 <?php include "components/footer.php"; ?>
