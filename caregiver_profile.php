@@ -19,6 +19,8 @@ if(isset($_POST['update_profile'])){
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $phone = trim($_POST['phone']);
+    $address = trim($_POST['address'] ?? '');
+    $age = trim($_POST['age'] ?? '');
     $password = trim($_POST['password']);
 
     if(empty($name) || empty($email) || empty($phone)){
@@ -27,17 +29,34 @@ if(isset($_POST['update_profile'])){
         $message = "Phone must start with 97 or 98 and be 10 digits.";
     } elseif(!filter_var($email,FILTER_VALIDATE_EMAIL)){
         $message = "Invalid email format.";
+    } elseif($age !== '' && (!is_numeric($age) || (int)$age <= 0 || (int)$age > 120)){
+        $message = "Invalid age.";
     } else {
         $check = mysqli_query($conn,"SELECT id FROM users WHERE (phone='$phone' OR email='$email') AND id!='$user_id'");
         if(mysqli_num_rows($check)>0){
             $message="Email or phone already in use.";
         } else {
+            $fields = [
+                "name='$name'",
+                "email='$email'",
+                "phone='$phone'"
+            ];
+
+            if (userColumnExists($conn, 'address')) {
+                $fields[] = "address='$address'";
+            }
+            if (userColumnExists($conn, 'age')) {
+                $fields[] = "age=" . ($age !== '' ? (int)$age : 'NULL');
+            }
+
             if($password){
                 $pass=password_hash($password,PASSWORD_DEFAULT);
-                mysqli_query($conn,"UPDATE users SET name='$name', email='$email', phone='$phone', password='$pass' WHERE id='$user_id'");
-            } else {
-                mysqli_query($conn,"UPDATE users SET name='$name', email='$email', phone='$phone' WHERE id='$user_id'");
+                $fields[] = "password='$pass'";
             }
+
+            $fields_sql = implode(', ', $fields);
+            mysqli_query($conn, "UPDATE users SET $fields_sql WHERE id='$user_id'");
+
             $message="Profile updated successfully!";
             $_SESSION['name']=$name;
             $result = mysqli_query($conn, "SELECT * FROM users WHERE id='$user_id'");
@@ -76,6 +95,12 @@ if(isset($_POST['update_profile'])){
 
                 <label>Phone</label>
                 <input type="text" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" placeholder="Start with 97 or 98, 10 digits" required>
+
+                <label>Address</label>
+                <input type="text" name="address" value="<?php echo htmlspecialchars($user['address'] ?? ''); ?>" placeholder="Enter your address">
+
+                <label>Age</label>
+                <input type="number" name="age" value="<?php echo htmlspecialchars($user['age'] ?? ''); ?>" min="1" max="120" placeholder="Enter your age">
 
                 <label>Change Password (leave blank to keep current)</label>
                 <input type="password" name="password" placeholder="New password">

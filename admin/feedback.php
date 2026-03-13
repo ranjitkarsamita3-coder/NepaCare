@@ -7,22 +7,28 @@ if(!isset($_SESSION['admin_id'])){
     exit;
 }
 
-$role = 'admin';
-$activePage = 'users';
+$createTableSql = "CREATE TABLE IF NOT EXISTS feedback (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    user_role VARCHAR(20) NOT NULL,
+    subject VARCHAR(255) DEFAULT NULL,
+    message TEXT NOT NULL,
+    is_read TINYINT(1) NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+mysqli_query($conn, $createTableSql);
 
-$users = mysqli_query($conn, "
-    SELECT u.*, 
-           (SELECT name FROM users WHERE id=u.linked_elder_id) as linked_elder_name,
-           (SELECT name FROM users WHERE linked_elder_id=u.id AND role='caregiver') as linked_caregiver_name
-    FROM users u 
-    ORDER BY u.role, u.id DESC
-");
+$role = 'admin';
+$activePage = 'feedback';
+$message = '';
+
+$feedbacks = mysqli_query($conn, "SELECT f.*, u.name AS user_name, u.role AS user_role FROM feedback f LEFT JOIN users u ON u.id = f.user_id ORDER BY f.created_at DESC");
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Manage Users - NepaCare Admin</title>
+    <title>Feedback - NepaCare Admin</title>
     <link rel="stylesheet" href="../assets/css/caregiverstyle.css">
     <style>
         .page-wrapper { display: flex; min-height: 100vh; }
@@ -62,22 +68,12 @@ $users = mysqli_query($conn, "
             color: #b43113;
             margin-bottom: 20px;
         }
-        .filter-buttons {
+        .success-msg {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 6px;
             margin-bottom: 20px;
-        }
-        .filter-buttons button {
-            padding: 8px 16px;
-            margin-right: 10px;
-            background: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .filter-buttons button.active {
-            background: #1e3a8a;
-            color: white;
-            border-color: #1e3a8a;
         }
         table {
             width: 100%;
@@ -100,17 +96,15 @@ $users = mysqli_query($conn, "
             border-bottom: 1px solid #ddd;
         }
         tr:hover { background-color: #f9f9f9; }
-        .badge {
+        .label {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 4px 10px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
         }
-        .badge-caregiver { background: #e3f2fd; color: #1976d2; }
-        .badge-elder { background: #f3e5f5; color: #7b1fa2; }
-        .linked { background: #e8f5e9; color: #2e7d32; }
-        .unlinked { background: #ffebee; color: #c62828; }
+        .label-elder { background: #f3e5f5; color: #7b1fa2; }
+        .label-caregiver { background: #e3f2fd; color: #1976d2; }
     </style>
 </head>
 <body>
@@ -129,47 +123,39 @@ $users = mysqli_query($conn, "
     </div>
 
     <div class="admin-content">
-        <h1>Manage Users</h1>
+        <h1>Feedback</h1>
 
-        <h2>User Directory</h2>
-        
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Role</th>
-                <th>Linked To</th>
-                <th>Registration Date</th>
-            </tr>
 
-            <?php while($user = mysqli_fetch_assoc($users)): ?>
-            <tr>
-                <td><?php echo $user['id']; ?></td>
-                <td><?php echo htmlspecialchars($user['name']); ?></td>
-                <td><?php echo htmlspecialchars($user['email']); ?></td>
-                <td><?php echo htmlspecialchars($user['phone']); ?></td>
-                <td>
-                    <span class="badge badge-<?php echo $user['role']; ?>">
-                        <?php echo ucfirst($user['role']); ?>
-                    </span>
-                </td>
-                <td>
-                    <?php 
-                    if($user['role'] == 'caregiver' && $user['linked_elder_name']){
-                        echo '<span class="badge linked">' . htmlspecialchars($user['linked_elder_name']) . ' (Elder)</span>';
-                    } elseif($user['role'] == 'elder' && $user['linked_caregiver_name']){
-                        echo '<span class="badge linked">' . htmlspecialchars($user['linked_caregiver_name']) . ' (Caregiver)</span>';
-                    } else {
-                        echo '<span class="badge unlinked">Not Linked</span>';
-                    }
-                    ?>
-                </td>
-                <td><?php echo date('Y-m-d H:i', strtotime($user['created_at'] ?? 'now')); ?></td>
-            </tr>
-            <?php endwhile; ?>
-        </table>
+        <?php if($feedbacks && mysqli_num_rows($feedbacks) > 0): ?>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Submitted</th>
+                </tr>
+                <?php while($row = mysqli_fetch_assoc($feedbacks)): ?>
+                    <tr>
+                        <td><?php echo $row['id']; ?></td>
+                        <td><?php echo htmlspecialchars($row['user_name'] ?? 'Unknown'); ?></td>
+                        <td>
+                            <?php
+                                $roleLabel = $row['user_role'] ?? 'unknown';
+                                $class = $roleLabel === 'elder' ? 'label-elder' : ($roleLabel === 'caregiver' ? 'label-caregiver' : 'label-unread');
+                            ?>
+                            <span class="label <?php echo $class; ?>"><?php echo ucfirst(htmlspecialchars($roleLabel)); ?></span>
+                        </td>
+                        <td><?php echo htmlspecialchars($row['subject']); ?></td>
+                        <td style="max-width: 350px; white-space: pre-wrap; word-break: break-word;"><?php echo htmlspecialchars($row['message']); ?></td>
+                        <td><?php echo date('Y-m-d H:i', strtotime($row['created_at'])); ?></td>
+                    </tr>
+                <?php endwhile; ?>
+            </table>
+        <?php else: ?>
+            <p>No feedback entries have been submitted yet.</p>
+        <?php endif; ?>
 
     </div>
 </div>

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'config/db.php';
+include_once __DIR__ . '/config/lang.php';
 
 $message = "";
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
@@ -23,7 +24,7 @@ if (isset($_POST['login'])) {
     $password    = trim($_POST['password']);
 
     if (empty($login_input) || empty($password)) {
-        $message = "Please fill in all fields.";
+        $message = __('Please fill in all fields.');
     } else {
         $login_input_safe = mysqli_real_escape_string($conn, $login_input);
 
@@ -32,7 +33,7 @@ if (isset($_POST['login'])) {
         } elseif (preg_match('/^(97|98)[0-9]{8}$/', $login_input_safe)) {
             $query = mysqli_query($conn, "SELECT * FROM users WHERE phone='$login_input_safe' LIMIT 1");
         } else {
-            $message = "Enter a valid email or phone number starting with 97 or 98.";
+            $message = __('Enter a valid email or phone number starting with 97 or 98.');
         }
 
         if (isset($query) && mysqli_num_rows($query) === 1) {
@@ -54,10 +55,10 @@ if (isset($_POST['login'])) {
                 header("Location: " . ($user['role'] === 'elder' ? "elder_dashboard.php" : "caregiver_dashboard.php"));
                 exit;
             } else {
-                $message = "Incorrect password.";
+                $message = __('Incorrect password.');
             }
         } else {
-            $message = "User not found.";
+            $message = __('User not found.');
         }
     }
 }
@@ -68,7 +69,7 @@ if (isset($_POST['login'])) {
 <link rel="stylesheet" href="assets/css/loginstyle.css">
 
 <div class="login-container dark-card">
-    <h1>Welcome Back</h1>
+    <h1><?php echo __('Welcome Back'); ?></h1>
 
     <?php if ($message): ?>
         <div class="message-box message-error"><?= $message ?></div>
@@ -78,7 +79,7 @@ if (isset($_POST['login'])) {
 
         <input type="text"
             name="login_input"
-            placeholder="Email or Phone"
+            placeholder="<?php echo __('Email or Phone'); ?>"
             value="<?= isset($_POST['login_input']) ? $_POST['login_input'] : ''; ?>"
             required>
 
@@ -86,20 +87,20 @@ if (isset($_POST['login'])) {
             <input type="password"
                 name="password"
                 id="password"
-                placeholder="Password"
+                placeholder="<?php echo __('Password'); ?>"
                 required>
             <span class="eye" onclick="togglePassword()">👁</span>
         </div>
         <div style="margin:8px 0 16px 0;">
-            <label style="font-size:14px;"><input type="checkbox" name="remember" value="1"> Remember me</label>
+            <label style="font-size:14px;"><input type="checkbox" name="remember" value="1"> <?php echo __('Remember me'); ?></label>
         </div>
 
-        <input type="submit" name="login" value="Login">
+        <input type="submit" name="login" value="<?php echo __('Login'); ?>">
 
     </form>
 
     <p class="signup-link">
-        Don’t have an account? <a href="signup.php">Sign up</a>
+        <?php echo __("Don't have an account?"); ?> <a href="signup.php"><?php echo __('Sign up'); ?></a>
     </p>
 </div>
 

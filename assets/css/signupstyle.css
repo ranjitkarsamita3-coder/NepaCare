@@ -22,11 +22,8 @@ body {
     color: var(--accent-400);
 }
 
-.dark-card input[type="text"],
-.dark-card input[type="email"],
-.dark-card input[type="password"],
-.dark-card select {
-    width:90%;
+.dark-card input[type="number"] {
+    width: 100%;               /* match other inputs */
     padding: 16px;
     margin-bottom: 18px;
     font-size: 18px;
@@ -35,7 +32,12 @@ body {
     background: #fefefe;
     color: #103668;
     outline: none;
+    box-sizing: border-box;    
+    appearance: none;         
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
 }
+
 
 .dark-card input::placeholder {
     color: #87b0e5;

@@ -10,8 +10,10 @@ if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'caregiver'){
 $caregiver_id = $_SESSION['user_id'];
 
 $elder = null;
+$cols = getExistingUserColumns($conn, ['id','name','email','phone','address','age']);
+$cols_sql = implode(', ', $cols);
 $check = mysqli_query($conn, "
-    SELECT u.id, u.name 
+    SELECT $cols_sql
     FROM users u
     JOIN users c ON c.linked_elder_id = u.id
     WHERE c.id = '$caregiver_id'
@@ -44,6 +46,22 @@ if ($check && mysqli_num_rows($check) === 1) {
                 by managing their reminders, checking schedules, and supporting daily tasks.
             </p>
         </div>
+
+        <?php if ($elder): ?>
+            <div class="intro">
+                <h2>Linked Elder Details</h2>
+                <p><strong>Name:</strong> <?= htmlspecialchars($elder['name']) ?></p>
+                <p><strong>Email:</strong> <?= htmlspecialchars($elder['email']) ?></p>
+                <p><strong>Phone:</strong> <?= htmlspecialchars($elder['phone'] ?? '') ?></p>
+                <p><strong>Age:</strong> <?= htmlspecialchars($elder['age'] ?? '') ?></p>
+                <p><strong>Address:</strong> <?= htmlspecialchars($elder['address'] ?? '') ?></p>
+            </div>
+        <?php else: ?>
+            <div class="intro">
+                <h2>Linked Elder</h2>
+                <p>No elder is currently linked. Go to <a href="link_elder.php">Link Elder</a> to connect with an elder.</p>
+            </div>
+        <?php endif; ?>
     </div>
 
 </div>

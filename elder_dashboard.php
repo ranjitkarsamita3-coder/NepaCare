@@ -10,6 +10,13 @@ if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'elder'){
 $user_id = $_SESSION['user_id'];
 $message = "";
 
+$cols = getExistingUserColumns($conn, ['email','phone','address','age']);
+$user = [];
+if (!empty($cols)) {
+    $cols_sql = implode(', ', $cols);
+    $user = mysqli_fetch_assoc(mysqli_query($conn, "SELECT $cols_sql FROM users WHERE id='$user_id'"));
+}
+
 $role = 'elder';
 $activePage = 'home';
 ?>
@@ -43,6 +50,15 @@ $activePage = 'home';
 
     <div class="content">
     <h1>Welcome, <?php echo $_SESSION['name']; ?>!</h1>
+
+    <div class="intro">
+        <h2>Your Details</h2>
+        <p><strong>Email:</strong> <?= htmlspecialchars($user['email'] ?? '') ?></p>
+        <p><strong>Phone:</strong> <?= htmlspecialchars($user['phone'] ?? '') ?></p>
+        <p><strong>Age:</strong> <?= htmlspecialchars($user['age'] ?? '') ?></p>
+        <p><strong>Address:</strong> <?= htmlspecialchars($user['address'] ?? '') ?></p>
+    </div>
+
     <h2>About NepaCare</h2>
     <p>
         NepaCare is a simple, easy-to-use reminder system designed especially for elders.

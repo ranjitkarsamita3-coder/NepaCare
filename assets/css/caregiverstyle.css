@@ -79,6 +79,7 @@ body {
 }
 
 form input[type="text"],
+form input[type="number"],
 form input[type="date"],
 form input[type="time"] {
     padding: 10px;
@@ -89,12 +90,20 @@ form input[type="time"] {
     font-size: 15px;
     transition: all 0.3s ease;
     box-sizing: border-box;
+    -moz-appearance: textfield;
 }
 
 form input[type="text"]:focus,
+form input[type="number"]:focus,
 form input[type="date"]:focus,
 form input[type="time"]:focus {
     border-color: #3b82f6;
+}
+
+form input[type="number"]::-webkit-inner-spin-button,
+form input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 form select {

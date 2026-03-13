@@ -7,6 +7,7 @@
     <a href="caregiver_dashboard.php">Home</a>
     <a href="caregiver_reminders.php">Reminders</a>
     <a href="caregiver_profile.php">Profile</a>
+    <a href="feedback.php">Feedback</a>
     <a href="link_elder.php">Link Elder</a>
     <a href="logout.php">Logout</a>
 </div>
