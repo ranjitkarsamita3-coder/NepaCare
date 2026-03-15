@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'config/db.php';
+include_once __DIR__ . '/config/lang.php';
 
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'elder'){
     header("Location: login.php");
@@ -10,9 +11,9 @@ if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'elder'){
 $user_id = $_SESSION['user_id'];
 
 $hour = date('H');
-if ($hour < 12) $greeting = "Good morning";
-elseif ($hour < 17) $greeting = "Good afternoon";
-else $greeting = "Good evening";
+if ($hour < 12) $greeting = __('Good morning');
+elseif ($hour < 17) $greeting = __('Good afternoon');
+else $greeting = __('Good evening');
 
 $healthTips = [
     "Drink enough water every day to stay healthy.",
@@ -33,7 +34,7 @@ $activePage = 'home';
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Elder Dashboard - NepaCare</title>
+    <title><?php echo __('Elder Dashboard'); ?> - <?php echo __('NepaCare'); ?></title>
     <link rel="stylesheet" href="assets/css/caregiverstyle.css">
     <style>
         body {
@@ -111,9 +112,9 @@ $activePage = 'home';
     <script>
         function showSuggestion(status) {
             let suggestionText = "";
-            if (status === "good") suggestionText = "Keep up the great work! Stay active today.";
-            else if (status === "okay") suggestionText = "Take some rest and do light activity if possible.";
-            else if (status === "not-well") suggestionText = "Please consult your caregiver or doctor if needed.";
+            if (status === "good") suggestionText = "<?php echo __('Keep up the great work! Stay active today.'); ?>";
+            else if (status === "okay") suggestionText = "<?php echo __('Take some rest and do light activity if possible.'); ?>";
+            else if (status === "not-well") suggestionText = "<?php echo __('Please consult your caregiver or doctor if needed.'); ?>";
             document.getElementById("suggestion").innerText = suggestionText;
         }
     </script>
@@ -126,32 +127,32 @@ $activePage = 'home';
     <div class="content">
 
         <div class="welcome-msg">
-            <?= $greeting ?>, <?= htmlspecialchars($_SESSION['name']) ?>!
+            <?php echo $greeting; ?>, <?= htmlspecialchars($_SESSION['name']) ?>!
         </div>
 
         <div class="top-cards">
 
             <div class="card">
-                <h2>Daily Activity Reminder</h2>
+                <h2><?php echo __('Daily Activity Reminder'); ?></h2>
                 <ul>
-                    <li>Morning Walk</li>
-                    <li>Drink Water</li>
-                    <li>Exercise Time</li>
+                    <li><?php echo __('Morning Walk'); ?></li>
+                    <li><?php echo __('Drink Water'); ?></li>
+                    <li><?php echo __('Exercise Time'); ?></li>
                 </ul>
             </div>
 
             <div class="card">
-                <h2>Health Tip</h2>
+                <h2><?php echo __('Health Tip'); ?></h2>
                 <p><?= $dailyTip ?></p>
             </div>
 
             <div class="card">
-                <h2>Wellness Check</h2>
-                <p>How are you feeling today?</p>
+                <h2><?php echo __('Wellness Check'); ?></h2>
+                <p><?php echo __('How are you feeling today?'); ?></p>
                 <div class="wellness-buttons">
-                    <button class="good" onclick="showSuggestion('good')">Good</button>
-                    <button class="okay" onclick="showSuggestion('okay')">Okay</button>
-                    <button class="not-well" onclick="showSuggestion('not-well')">Not well</button>
+                    <button class="good" onclick="showSuggestion('good')"><?php echo __('Good'); ?></button>
+                    <button class="okay" onclick="showSuggestion('okay')"><?php echo __('Okay'); ?></button>
+                    <button class="not-well" onclick="showSuggestion('not-well')"><?php echo __('Not well'); ?></button>
                 </div>
                 <p class="suggestion" id="suggestion"></p>
             </div>
@@ -159,12 +160,9 @@ $activePage = 'home';
         </div>
 
         <div class="about-section">
-            <h2>About NepaCare</h2>
+            <h2><?php echo __('About Us'); ?></h2>
             <p>
-                NepaCare is a simple, easy-to-use reminder system designed especially for elders.
-                You can manage your daily tasks, set reminders, and receive alerts when it's time
-                to do something important. This system ensures you never miss a task and helps
-                caregivers stay informed.
+                <?php echo __('Elder about paragraph'); ?>
             </p>
         </div>
 

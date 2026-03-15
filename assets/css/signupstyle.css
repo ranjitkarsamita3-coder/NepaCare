@@ -22,8 +22,12 @@ body {
     color: var(--accent-400);
 }
 
-.dark-card input[type="number"] {
-    width: 100%;               /* match other inputs */
+.dark-card input[type="text"],
+.dark-card input[type="email"],
+.dark-card input[type="number"],
+.dark-card input[type="password"],
+.dark-card select {
+    width: 100%;
     padding: 16px;
     margin-bottom: 18px;
     font-size: 18px;
@@ -32,12 +36,8 @@ body {
     background: #fefefe;
     color: #103668;
     outline: none;
-    box-sizing: border-box;    
-    appearance: none;         
-    -webkit-appearance: none;
-    -moz-appearance: textfield;
+    box-sizing: border-box;
 }
-
 
 .dark-card input::placeholder {
     color: #87b0e5;
@@ -52,7 +52,6 @@ body {
 .password-wrapper {
     position: relative;
     width: 100%;
-    margin-bottom: 18px;
 }
 
 .password-wrapper input {
@@ -62,10 +61,10 @@ body {
 .password-wrapper .eye {
     position: absolute;
     right: 16px;
-    top: 40%;
+    top: 35%;
     transform: translateY(-50%);
     cursor: pointer;
-    color: rgba(4, 54, 77, 0.5);
+    color: #8aa4c5;
     font-size: 18px;
 }
 
@@ -84,7 +83,7 @@ body {
 
 .dark-card input[type="submit"]:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(4, 54, 77, 0.5);
+    box-shadow: 0 10px 25px rgba(0,176,255,0.5);
 }
 
 .signup-link {
@@ -124,25 +123,4 @@ body {
 .dark-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(235, 146, 146, 0.2);
-}
-
-.dark-card select {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 16px;
-    margin-bottom: 18px;
-    font-size: 18px;
-    border-radius: 12px;
-    border: 1px solid #fd866b; 
-    background: #fefefe;
-    color: #103668;
-    outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%238aa4c5" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 16px center;
-    background-size: 18px;
-    cursor: pointer;
 }

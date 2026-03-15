@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'config/db.php';
+include_once __DIR__ . '/config/lang.php';
 
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'caregiver'){
     header("Location: login.php");
@@ -29,7 +30,7 @@ $activePage = 'home';
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Caregiver Dashboard - NepaCare</title>
+    <title><?php echo __('Caregiver Dashboard'); ?> - <?php echo __('NepaCare'); ?></title>
     <link rel="stylesheet" href="assets/css/caregiverstyle.css">
     <style>
         body {
@@ -89,21 +90,21 @@ $activePage = 'home';
 
     <div class="content">
         <div class="welcome-msg">
-            Welcome, <?= htmlspecialchars($_SESSION['name']) ?>!
+            <?php echo __('Welcome, '); ?><?= htmlspecialchars($_SESSION['name']) ?>!
             <?php if($elder): ?>
-                <br>Linked Elder: <?= htmlspecialchars($elder['name']) ?>
+                <br><?php echo __('Linked Elder: '); ?><?= htmlspecialchars($elder['name']) ?>
             <?php endif; ?>
         </div>
 
         <?php if($elder): ?>
             <div class="last-seen">
-                <h2>Last Seen</h2>
+                <h2><?php echo __('Last Seen'); ?></h2>
                 <p>
                     <?php 
                         if(!empty($elder['last_login'])){
                             echo date('F j, Y, h:i A', strtotime($elder['last_login']));
                         } else {
-                            echo "No login records found.";
+                            echo __('No login records found.');
                         }
                     ?>
                 </p>
@@ -111,11 +112,9 @@ $activePage = 'home';
         <?php endif; ?>
 
         <div class="about-section">
-            <h2>About NepaCare</h2>
+            <h2><?php echo __('About Us'); ?></h2>
             <p>
-                NepaCare is a simple reminder and care-support system designed
-                especially for elders in Nepal. As a caregiver, you can help elders
-                by managing their reminders, checking schedules, and supporting daily tasks.
+                <?php echo __('Caregiver about paragraph'); ?>
             </p>
         </div>
     </div>
