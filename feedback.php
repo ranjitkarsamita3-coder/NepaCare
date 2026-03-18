@@ -9,18 +9,6 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['elder', 'care
 
 $user_id = $_SESSION['user_id'];
 $role = $_SESSION['role'];
-
-$createTableSql = "CREATE TABLE IF NOT EXISTS feedback (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    user_role VARCHAR(20) NOT NULL,
-    subject VARCHAR(255) DEFAULT NULL,
-    message TEXT NOT NULL,
-    is_read TINYINT(1) NOT NULL DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
-mysqli_query($conn, $createTableSql);
-
 $notice = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -41,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Fetch past feedback
 $feedbacks = mysqli_query($conn, "SELECT * FROM feedback WHERE user_id = '$user_id' ORDER BY created_at DESC");
-
 $activePage = 'feedback';
 ?>
 
@@ -60,13 +48,7 @@ $activePage = 'feedback';
             border-radius: 12px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.1);
         }
-
-        .feedback-form label {
-            display: block;
-            margin-top: 15px;
-            font-weight: 600;
-        }
-
+        .feedback-form label { display: block; margin-top: 15px; font-weight: 600; }
         .feedback-form .input-box {
             width: 100%;
             padding: 12px;
@@ -75,11 +57,7 @@ $activePage = 'feedback';
             font-size: 15px;
             box-sizing: border-box;
         }
-
-        .feedback-form textarea.input-box {
-            min-height: 140px;
-            resize: vertical;
-        }
+        .feedback-form textarea.input-box { min-height: 140px; resize: vertical; }
         .notice {
             padding: 12px 16px;
             border-radius: 8px;
@@ -88,38 +66,12 @@ $activePage = 'feedback';
             margin-bottom: 20px;
             border: 1px solid #c3e6cb;
         }
-        .notice.error {
-            background: #f8d7da;
-            color: #721c24;
-            border-color: #f5c6cb;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-
-        th, td {
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            vertical-align: top; 
-        }
-        th {
-            background-color: #1e3a8a;
-            color: #fff;
-            text-align: left;
-        }
-        td.message-cell {
-            width: 50%; 
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        td.subject-cell {
-            width: 30%;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
+        .notice.error { background: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        th, td { padding: 12px 15px; border: 1px solid #ddd; vertical-align: top; }
+        th { background-color: #1e3a8a; color: #fff; text-align: left; }
+        td.message-cell { width: 50%; white-space: pre-wrap; word-wrap: break-word; }
+        td.subject-cell { width: 30%; white-space: pre-wrap; word-wrap: break-word; }
         tr:hover { background-color: #f9f9f9; }
     </style>
 </head>
@@ -137,7 +89,9 @@ $activePage = 'feedback';
         <p>Have a suggestion or issue? Send it here and our team will review it.</p>
 
         <?php if ($notice): ?>
-            <div class="notice<?php echo ($notice === 'Please enter a message.') ? ' error' : ''; ?>"><?php echo htmlspecialchars($notice); ?></div>
+            <div class="notice<?php echo ($notice === 'Please enter a message.') ? ' error' : ''; ?>">
+                <?php echo htmlspecialchars($notice); ?>
+            </div>
         <?php endif; ?>
 
         <div class="feedback-form">
@@ -173,7 +127,6 @@ $activePage = 'feedback';
                 </table>
             </div>
         <?php endif; ?>
-
     </div>
 </div>
 

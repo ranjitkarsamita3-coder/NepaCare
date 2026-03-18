@@ -166,4 +166,3 @@ function togglePassword() {
 </script>
 
 <?php include "components/footer.php"; ?>
-```
