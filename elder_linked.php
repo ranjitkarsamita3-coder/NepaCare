@@ -31,9 +31,11 @@ $otpData = mysqli_fetch_assoc(
      FROM users WHERE id='$user_id'")
 );
 
+$cols = getExistingUserColumns($conn, ['name','email','phone','address','age']);
+$cols_sql = implode(', ', $cols);
 $caregiver = mysqli_fetch_assoc(
     mysqli_query($conn,
-    "SELECT name, email 
+    "SELECT $cols_sql 
      FROM users 
      WHERE linked_elder_id='$user_id' AND role='caregiver'")
 );
@@ -62,6 +64,9 @@ h2 { color: #de7c67; }
 <?php if($caregiver): ?>
     <p><strong>Name:</strong> <?= htmlspecialchars($caregiver['name']) ?></p>
     <p><strong>Email:</strong> <?= htmlspecialchars($caregiver['email']) ?></p>
+    <p><strong>Phone:</strong> <?= htmlspecialchars($caregiver['phone'] ?? '') ?></p>
+    <p><strong>Age:</strong> <?= htmlspecialchars($caregiver['age'] ?? '') ?></p>
+    <p><strong>Address:</strong> <?= htmlspecialchars($caregiver['address'] ?? '') ?></p>
 <?php else: ?>
     <p>No caregiver linked yet.</p>
 <?php endif; ?>

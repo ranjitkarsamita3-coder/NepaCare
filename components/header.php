@@ -1,3 +1,4 @@
+<?php include_once __DIR__ . '/../config/lang.php'; ?>
 <!DOCTYPE html>
 <html>
 <head>

@@ -1,12 +1,10 @@
 <?php define('STICKY_FOOTER', true); include "components/header.php"; ?>
 <link rel="stylesheet" href="assets/css/colors.css"> 
-<h1>About NepaCare</h1>
+<h1><?php echo __('About Us'); ?></h1>
 
 <div class="section">
     <p>
-        NepaCare is a platform dedicated to helping elders in Nepal manage daily tasks and medicines, ensuring safety and health.
-        Caregivers can also monitor reminders and support elders efficiently.
-        Our goal is to simplify elder care for families and professionals.
+        <?php echo __('About paragraph'); ?>
     </p>
 </div>
 

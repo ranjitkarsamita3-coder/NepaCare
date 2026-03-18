@@ -117,10 +117,14 @@ $users = mysqli_query($conn, "
 
 <div class="page-wrapper">
     <div class="admin-sidebar">
+        <div class="logo-container" style="text-align:center; margin-bottom:20px;">
+            <img src="../assets/images/logo.png" alt="NepaCare Logo" class="logo" style="max-width:100px; height:auto; border-radius:15px; border:2px solid #fff;" />
+        </div>
         <h3>NepaCare Admin</h3>
         <a href="index.php" class="<?= $activePage=='dashboard'?'active':'' ?>">Dashboard</a>
         <a href="manage_registrations.php" class="<?= $activePage=='registrations'?'active':'' ?>">Manage Registrations</a>
         <a href="manage_users.php" class="<?= $activePage=='users'?'active':'' ?>">Manage Users</a>
+        <a href="feedback.php" class="<?= $activePage=='feedback'?'active':'' ?>">Feedback</a>
         <a href="logout.php">Logout</a>
     </div>
 

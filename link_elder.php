@@ -11,7 +11,9 @@ $caregiver_id = $_SESSION['user_id'];
 $message = "";
 
 $linked_elder = null;
-$res = mysqli_query($conn,"SELECT id,name,email FROM users WHERE id=(SELECT linked_elder_id FROM users WHERE id='$caregiver_id')");
+$cols = getExistingUserColumns($conn, ['id','name','email','phone','address','age']);
+$cols_sql = implode(',', $cols);
+$res = mysqli_query($conn,"SELECT $cols_sql FROM users WHERE id=(SELECT linked_elder_id FROM users WHERE id='$caregiver_id')");
 if($res && mysqli_num_rows($res)==1){
     $linked_elder = mysqli_fetch_assoc($res);
 }
@@ -49,6 +51,9 @@ if(isset($_POST['link_elder'])){
             <h2>Currently Linked Elder</h2>
             <p><strong>Name:</strong> <?php echo htmlspecialchars($linked_elder['name']); ?></p>
             <p><strong>Email:</strong> <?php echo htmlspecialchars($linked_elder['email']); ?></p>
+            <p><strong>Phone:</strong> <?php echo htmlspecialchars($linked_elder['phone'] ?? ''); ?></p>
+            <p><strong>Age:</strong> <?php echo htmlspecialchars($linked_elder['age'] ?? ''); ?></p>
+            <p><strong>Address:</strong> <?php echo htmlspecialchars($linked_elder['address'] ?? ''); ?></p>
         <?php endif; ?>
 
         <hr>

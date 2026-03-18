@@ -110,10 +110,14 @@ $activePage = 'dashboard';
 
 <div class="page-wrapper">
     <div class="admin-sidebar">
+        <div class="logo-container" style="text-align:center; margin-bottom:20px;">
+            <img src="../assets/images/logo.png" alt="NepaCare Logo" class="logo" style="max-width:100px; height:auto; border-radius:15px; border:2px solid #fff;" />
+        </div>
         <h3>NepaCare Admin</h3>
         <a href="index.php" class="<?= $activePage=='dashboard'?'active':'' ?>">Dashboard</a>
         <a href="manage_registrations.php" class="<?= $activePage=='registrations'?'active':'' ?>">Manage Registrations</a>
         <a href="manage_users.php" class="<?= $activePage=='users'?'active':'' ?>">Manage Users</a>
+        <a href="feedback.php" class="<?= $activePage=='feedback'?'active':'' ?>">Feedback</a>
         <a href="logout.php">Logout</a>
     </div>
 
@@ -129,6 +133,7 @@ $activePage = 'dashboard';
             $total_elders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count FROM users WHERE role='elder'"));
             
             $linked_pairs = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(DISTINCT linked_elder_id) as count FROM users WHERE linked_elder_id IS NOT NULL"));
+            
             ?>
             
             <div class="stat-card">
@@ -153,7 +158,7 @@ $activePage = 'dashboard';
         </div>
 
         <div class="chart-container">
-            <h2>📊 User Statistics by Role</h2>
+            <h2>User Statistics by Role</h2>
             <canvas id="userChart"></canvas>
         </div>
 
