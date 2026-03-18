@@ -7,6 +7,17 @@ if(!isset($_SESSION['admin_id'])){
     exit;
 }
 
+$createTableSql = "CREATE TABLE IF NOT EXISTS feedback (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    user_role VARCHAR(20) NOT NULL,
+    subject VARCHAR(255) DEFAULT NULL,
+    message TEXT NOT NULL,
+    is_read TINYINT(1) NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+mysqli_query($conn, $createTableSql);
+
 $role = 'admin';
 $activePage = 'feedback';
 $message = '';
