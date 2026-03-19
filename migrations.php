@@ -1,10 +1,4 @@
 <?php
-/**
- * NepaCare Database Migrations
- * Run this file once to add required columns to existing tables
- * Access via: http://localhost/Nepacare/migrations.php
- */
-
 session_start();
 include 'config/db.php';
 

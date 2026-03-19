@@ -20,7 +20,6 @@
 </div>
 
 <script>
-// Language switcher: stores choice in cookie and reloads
 (function(){
     function setLangCookie(lang){
         var d=new Date(); d.setFullYear(d.getFullYear()+1);

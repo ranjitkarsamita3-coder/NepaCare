@@ -5,7 +5,6 @@ include_once __DIR__ . '/config/lang.php';
 
 $message = "";
 
-/* AUTO LOGIN WITH REMEMBER TOKEN */
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
 
     $token = mysqli_real_escape_string($conn, $_COOKIE['remember_token']);
@@ -15,7 +14,6 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
 
         $user = mysqli_fetch_assoc($query);
 
-        /* CHECK STATUS */
         if ($user['status'] == 'inactive') {
             $message = __('Your account has been deactivated by admin.');
         } else {
@@ -32,7 +30,6 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     }
 }
 
-/* LOGIN FORM */
 if (isset($_POST['login'])) {
 
     $login_input = trim($_POST['login_input']);
@@ -63,10 +60,8 @@ if (isset($_POST['login'])) {
 
             $user = mysqli_fetch_assoc($query);
 
-            /* PASSWORD VERIFY */
             if (password_verify($password, $user['password'])) {
 
-                /* STATUS CHECK */
                 if ($user['status'] == 'inactive') {
 
                     $message = __('Your account has been deactivated by admin.');
@@ -79,7 +74,6 @@ if (isset($_POST['login'])) {
 
                     mysqli_query($conn, "UPDATE users SET last_login = NOW() WHERE id='{$user['id']}'");
 
-                    /* REMEMBER ME */
                     if (isset($_POST['remember'])) {
 
                         $token = bin2hex(random_bytes(16));

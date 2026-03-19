@@ -10,7 +10,6 @@ if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'caregiver'){
 
 $caregiver_id = $_SESSION['user_id'];
 
-// Get linked elder
 $elder = null;
 $check = mysqli_query($conn, "
     SELECT u.id, u.name, u.last_login 

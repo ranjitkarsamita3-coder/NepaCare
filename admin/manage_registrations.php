@@ -11,28 +11,24 @@ $role = 'admin';
 $activePage = 'registrations';
 $message = "";
 
-/* DELETE USER */
 if(isset($_POST['delete_user'])){
     $user_id = $_POST['user_id'];
     mysqli_query($conn, "DELETE FROM users WHERE id='$user_id'");
     $message = "User deleted successfully!";
 }
 
-/* DEACTIVATE USER */
 if(isset($_POST['deactivate_user'])){
     $user_id = $_POST['user_id'];
     mysqli_query($conn, "UPDATE users SET status='inactive' WHERE id='$user_id'");
     $message = "User deactivated successfully!";
 }
 
-/* ACTIVATE USER */
 if(isset($_POST['activate_user'])){
     $user_id = $_POST['user_id'];
     mysqli_query($conn, "UPDATE users SET status='active' WHERE id='$user_id'");
     $message = "User activated successfully!";
 }
 
-/* FETCH USERS */
 $users = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
 ?>
 
@@ -48,8 +44,6 @@ $users = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
 display:flex;
 min-height:100vh;
 }
-
-/* SIDEBAR */
 
 .admin-sidebar{
 width:250px;
@@ -79,8 +73,6 @@ background:#3478e5;
 color:#fd866b;
 }
 
-/* CONTENT */
-
 .admin-content{
 flex:1;
 padding:30px;
@@ -98,8 +90,6 @@ padding:12px;
 border-radius:6px;
 margin-bottom:20px;
 }
-
-/* TABLE */
 
 table{
 width:100%;
@@ -125,8 +115,6 @@ tr:hover{
 background:#f9f9f9;
 }
 
-/* BADGES */
-
 .badge{
 padding:4px 10px;
 border-radius:20px;
@@ -143,8 +131,6 @@ color:#1976d2;
 background:#f3e5f5;
 color:#7b1fa2;
 }
-
-/* BUTTONS */
 
 button{
 padding:6px 12px;
@@ -180,8 +166,6 @@ color:white;
 
 <div class="page-wrapper">
 
-<!-- SIDEBAR -->
-
 <div class="admin-sidebar">
 
 <div style="text-align:center;margin-bottom:20px;">
@@ -197,9 +181,6 @@ color:white;
 <a href="logout.php">Logout</a>
 
 </div>
-
-
-<!-- CONTENT -->
 
 <div class="admin-content">
 
@@ -244,8 +225,6 @@ color:white;
 
 <td><?php echo date('Y-m-d H:i', strtotime($user['created_at'] ?? 'now')); ?></td>
 
-<!-- STATUS -->
-
 <td>
 
 <?php if($user['status'] == 'inactive'): ?>
@@ -263,9 +242,6 @@ Active
 <?php endif; ?>
 
 </td>
-
-
-<!-- ACTION BUTTONS -->
 
 <td>
 

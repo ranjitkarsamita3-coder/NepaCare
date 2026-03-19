@@ -70,8 +70,6 @@ if(!isset($activePage)) $activePage = '';
 
     <a href="logout.php"><?php echo __('Logout'); ?></a>
 
-    <!-- Language Buttons -->
-
     <div class="lang-switch" id="lang-switch">
         <button class="lang-btn" data-lang="en">English</button>
         <button class="lang-btn" data-lang="ne">नेपाली</button>
@@ -80,8 +78,6 @@ if(!isset($activePage)) $activePage = '';
 </div>
 
 <script>
-
-// Language switcher using cookie
 
 (function(){
 
