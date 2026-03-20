@@ -4,13 +4,13 @@
     <div class="logo-container" style="text-align:center; margin-bottom:20px;">
         <img src="assets/images/logo.png" alt="NepaCare Logo" class="logo">
     </div>
-
     <h3><?php echo __('NepaCare'); ?></h3>
     <a href="caregiver_dashboard.php"><?php echo __('Home'); ?></a>
     <a href="caregiver_reminders.php"><?php echo __('Reminders'); ?></a>
     <a href="caregiver_profile.php"><?php echo __('Profile'); ?></a>
     <a href="feedback.php"><?php echo __('Feedback'); ?></a>
     <a href="link_elder.php"><?php echo __('Link Elder'); ?></a>
+
     <a href="logout.php"><?php echo __('Logout'); ?></a>
 
     <div class="lang-switch" id="lang-switch" style="margin-top:20px;">

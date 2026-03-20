@@ -58,6 +58,7 @@ if(!isset($activePage)) $activePage = '';
         <a href="feedback.php" class="<?= $activePage=='feedback'?'active':'' ?>"><?php echo __('Feedback'); ?></a>
         <a href="elder_linked.php" class="<?= $activePage=='linked'?'active':'' ?>"><?php echo __('Linked Caregiver'); ?></a>
 
+
     <?php elseif($role == 'caregiver'): ?>
 
         <a href="caregiver_dashboard.php" class="<?= $activePage=='home'?'active':'' ?>"><?php echo __('Home'); ?></a>
